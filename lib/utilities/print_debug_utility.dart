@@ -8,4 +8,10 @@ class PrintDebug {
       print(message);
     }
   }
+
+  void printGetTargets(message) {
+    if (functionName == "getTargets") {
+      print(message);
+    }
+  }
 }
