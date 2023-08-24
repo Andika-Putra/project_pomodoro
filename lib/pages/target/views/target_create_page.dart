@@ -1,14 +1,19 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_pomodoro/pages/target/models/target.dart';
 import 'package:project_pomodoro/pages/target/views/target_home_page.dart';
 import 'package:project_pomodoro/resources/container_resource.dart';
 import 'package:project_pomodoro/resources/gap_resource.dart';
 import 'package:project_pomodoro/resources/page_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
 import 'package:project_pomodoro/resources/text_resource.dart';
+import 'package:provider/provider.dart';
 
 import '../../../resources/appbar_resource.dart';
 import '../../../resources/color_choice_resource.dart';
+import '../controllers/target_controller.dart';
 
 class TargetCreatePage extends StatefulWidget {
   TargetCreatePage({super.key});
@@ -23,9 +28,11 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
   final createTargetFormKey = GlobalKey<FormState>();
   late final TextEditingController titleController;
   late final TextEditingController descriptionController;
-  String dateTimeFromString = "";
-  late final TextEditingController dateTimeFromController;
-  DateTime dateTimeFrom = DateTime.now();
+  late final TextEditingController dateController;
+  late final TextEditingController timeFromController;
+  late final TextEditingController timeToController;
+
+  DateTime date = DateTime.now();
   TimeOfDay timeFrom = TimeOfDay.now();
   TimeOfDay timeTo = TimeOfDay.now();
 
@@ -34,19 +41,26 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
     super.initState();
     titleController = TextEditingController();
     descriptionController = TextEditingController();
-    dateTimeFromController = TextEditingController();
+    dateController = TextEditingController();
+    timeFromController = TextEditingController();
+    timeToController = TextEditingController();
   }
 
   @override
   void dispose() {
     titleController.dispose();
     descriptionController.dispose();
-    dateTimeFromController.dispose();
+    dateController.dispose();
+    timeFromController.dispose();
+    timeToController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final targetProvider =
+        Provider.of<TargetController>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -78,52 +92,6 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                     prefixIcon: Icons.notes_rounded,
                     hintText: "Insert Description",
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     showDatePicker(
-                  //       context: context,
-                  //       initialDate: dateTimeFrom,
-                  //       firstDate: DateTime(2021),
-                  //       lastDate: DateTime(2025),
-                  //       initialEntryMode: DatePickerEntryMode.calendarOnly,
-                  //       initialDatePickerMode: DatePickerMode.day,
-                  //       selectableDayPredicate: (day) {
-                  //         if ((day.isAfter(DateTime.now()
-                  //             .subtract(const Duration(days: 1))))) {
-                  //           return true;
-                  //         } else {
-                  //           return false;
-                  //         }
-                  //       },
-                  //       builder: (context, child) {
-                  //         return Theme(
-                  //           data: ThemeData.light(),
-                  //           child: child!,
-                  //         );
-                  //       },
-                  //     ).then(
-                  //       (value) {
-                  //         if (value != null) {
-                  //           setState(
-                  //             () {
-                  //               dateTimeFrom = value;
-                  //               // dateTimeFromString = value.toString();
-                  //               dateTimeFromController.text =
-                  //                   DateFormat('d MMMM y').format(dateTimeFrom);
-                  //             },
-                  //           );
-                  //         }
-                  //       },
-                  //     );
-                  //   },
-                  //   child: AbsorbPointer(
-                  //     child: TextBox(
-                  //       controller: dateTimeFromController,
-                  //       prefixIcon: Icons.date_range_rounded,
-                  //       hintText: "Tap to Choose a Date",
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -174,7 +142,7 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                   onPressed: () {
                                     showDatePicker(
                                       context: context,
-                                      initialDate: dateTimeFrom,
+                                      initialDate: date,
                                       firstDate: DateTime(2021),
                                       lastDate: DateTime(2025),
                                       initialEntryMode:
@@ -200,14 +168,10 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                         if (value != null) {
                                           setState(
                                             () {
-                                              dateTimeFrom = value;
-                                              dateTimeFromString =
+                                              date = value;
+                                              dateController.text =
                                                   DateFormat('d MMMM y')
-                                                      .format(dateTimeFrom);
-                                              dateTimeFromController.text =
-                                                  DateFormat('d MMMM y')
-                                                      .format(dateTimeFrom);
-                                              // print(dateTimeFromString);
+                                                      .format(date);
                                             },
                                           );
                                         }
@@ -215,8 +179,9 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                     );
                                   },
                                   child: SimpleText(
-                                    text: DateFormat('d MMMM y')
-                                        .format(dateTimeFrom),
+                                    text: dateController.text == ""
+                                        ? "Choose a Date"
+                                        : DateFormat('d MMMM y').format(date),
                                     weight: FontWeight.bold,
                                     color: ColorChoice().brownPrimary(),
                                   ),
@@ -265,15 +230,20 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                             setState(
                                               () {
                                                 timeFrom = value;
+                                                timeFromController.text = value
+                                                    .toString()
+                                                    .substring(10, 15);
                                               },
                                             );
                                           }
                                         });
                                       },
                                       child: SimpleText(
-                                        text: timeFrom
-                                            .toString()
-                                            .substring(10, 15),
+                                        text: timeFromController.text == ""
+                                            ? "From"
+                                            : timeFrom
+                                                .toString()
+                                                .substring(10, 15),
                                         weight: FontWeight.bold,
                                         color: ColorChoice().brownPrimary(),
                                       ),
@@ -310,14 +280,20 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                             setState(
                                               () {
                                                 timeTo = value;
+                                                timeToController.text = value
+                                                    .toString()
+                                                    .substring(10, 15);
                                               },
                                             );
                                           }
                                         });
                                       },
                                       child: SimpleText(
-                                        text:
-                                            timeTo.toString().substring(10, 15),
+                                        text: timeToController.text == ""
+                                            ? "To"
+                                            : timeTo
+                                                .toString()
+                                                .substring(10, 15),
                                         weight: FontWeight.bold,
                                         color: ColorChoice().brownPrimary(),
                                       ),
@@ -356,7 +332,7 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Container(
+                    child: SizedBox(
                       height: ScreenSize().heightBody / 5,
                       width: ScreenSize().width / 2,
                       child: Column(
@@ -405,14 +381,30 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                       backgroundColor:
                                           ColorChoice().brownPrimary(),
                                     ),
-                                    onPressed: () {
-                                      Navigator.popUntil(
-                                          context,
-                                          ModalRoute.withName(
-                                              TargetHomePage.routeName));
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
+                                    onPressed: () async {
+                                      // print(API().baseUri(API.targets));
+                                      await targetProvider
+                                          .addTarget(
+                                        Target(
+                                          title: titleController.text,
+                                          description:
+                                              descriptionController.text,
+                                          date: dateController.text,
+                                          timeFrom: timeFromController.text,
+                                          timeTo: timeToController.text,
+                                        ),
+                                      )
+                                          .then((_) {
+                                        Navigator.popUntil(
+                                            context,
+                                            ModalRoute.withName(
+                                                TargetHomePage.routeName));
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                TargetHomePage.routeName);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
                                             backgroundColor:
                                                 ColorChoice().brownPrimary(),
                                             content: SimpleText(
@@ -420,8 +412,26 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                                   "Target has been successfully created!",
                                               color: ColorChoice().white(),
                                               weight: FontWeight.bold,
-                                            )),
-                                      );
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                      // Navigator.popUntil(
+                                      //     context,
+                                      //     ModalRoute.withName(
+                                      //         TargetHomePage.routeName));
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   SnackBar(
+                                      //       backgroundColor:
+                                      //           ColorChoice().brownPrimary(),
+                                      //       content: SimpleText(
+                                      //         text:
+                                      //             "Target has been successfully created!",
+                                      //         color: ColorChoice().white(),
+                                      //         weight: FontWeight.bold,
+                                      //       )),
+                                      // );
                                     },
                                     child: SimpleText(
                                       text: "Sure",
