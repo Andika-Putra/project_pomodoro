@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 class PrintDebug {
-  String functionName = "";
+  String functionName = "getTargets";
 
   void printGetPomodoroFaqs(message) {
     if (functionName == "getPomodoroFaqs") {

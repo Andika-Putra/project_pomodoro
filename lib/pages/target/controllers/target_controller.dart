@@ -64,17 +64,30 @@ class TargetController with ChangeNotifier {
       _returnedGetTargetsTrigger = false;
       _returnedGetTargetsNoDataFlag = false;
       _returnedGetTargets = {};
+
+      PrintDebug().printGetTargets(API().baseUri(API.getTargets));
+
+      var requestBody = {"personId": 1};
+
+      PrintDebug().printGetTargets(json.encode(requestBody));
       await Future.delayed(
         const Duration(seconds: 2),
         () async {
-          http.Response response = await http.get(API().baseUri(API.targets));
+          // http.Response response =
+          //     await http.get(API().baseUri(API.getTargets));
+
+          http.Response response = await http.post(
+            API().baseUri(API.getTargets),
+            body: json.encode(requestBody),
+          );
+
           _returnedGetTargets = (json.decode(response.body));
 
           PrintDebug().printGetTargets(_returnedGetTargets);
         },
       );
     } catch (e) {
-      PrintDebug().printGetTargets("e");
+      PrintDebug().printGetTargets(e);
     } finally {
       _returnedGetTargetsTrigger = true;
       if (_returnedGetTargets.isEmpty) {
