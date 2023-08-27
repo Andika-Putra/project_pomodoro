@@ -70,6 +70,16 @@ class TargetController with ChangeNotifier {
       var requestBody = {"personId": 1};
 
       PrintDebug().printGetTargets(json.encode(requestBody));
+      PrintDebug().printGetTargets(utf8.encode(requestBody.toString()).length);
+
+      var requestHeaders = {
+        "Content-Type": "application/json",
+        "Host": "10.0.2.2:44337",
+        "Content-Length": "${utf8.encode(requestBody.toString()).length + 1}"
+      };
+
+      PrintDebug().printGetTargets(requestHeaders);
+
       await Future.delayed(
         const Duration(seconds: 2),
         () async {
@@ -78,6 +88,12 @@ class TargetController with ChangeNotifier {
 
           http.Response response = await http.post(
             API().baseUri(API.getTargets),
+            headers: {
+              "Content-Type": "application/json",
+              "Host": "localhost:44337",
+              "Content-Length":
+                  "${utf8.encode(requestBody.toString()).length + 1}"
+            },
             body: json.encode(requestBody),
           );
 

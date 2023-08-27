@@ -60,16 +60,17 @@ class TargetHomePage extends StatelessWidget {
                         //     description: value.returnedGetTargets["data"][i]
                         //         ["description"],
                         //   ),
-
-                        for (var key in value.returnedGetTargets.keys)
+                        for (int i = 0; i < value.returnedGetTargetsLength; i++)
                           TargetCard(
-                            title: value.returnedGetTargets[key]["title"],
-                            date: value.returnedGetTargets[key]["date"],
-                            timeFrom: value.returnedGetTargets[key]["timeFrom"],
-                            timeTo: value.returnedGetTargets[key]["timeTo"],
-                            description: value.returnedGetTargets[key]
+                            title: value.returnedGetTargets["data"][i]["title"],
+                            date: value.returnedGetTargets["data"][i]
+                                ["dateChosen"],
+                            timeFrom: value.returnedGetTargets["data"][i]
+                                ["timeFrom"],
+                            timeTo: value.returnedGetTargets["data"][i]
+                                ["timeTo"],
+                            description: value.returnedGetTargets["data"][i]
                                 ["description"],
-                            targetKey: key,
                           ),
                       ],
                     )
@@ -106,6 +107,15 @@ class TargetHomePage extends StatelessWidget {
                   ],
                 ),
         ),
+
+        // child: Consumer<TargetController>(
+        //   builder: (context, value, child) => Column(
+        //     children: [
+        //       for
+        //       SimpleText(text: value.returnedGetTargetsLength.toString()),
+        //     ],
+        //   ),
+        // ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -164,7 +174,7 @@ class SkeletonTargetList extends StatelessWidget {
 }
 
 class TargetCard extends StatelessWidget {
-  final String title, date, timeFrom, timeTo, description, targetKey;
+  final String title, date, timeFrom, timeTo, description;
 
   const TargetCard({
     super.key,
@@ -173,7 +183,6 @@ class TargetCard extends StatelessWidget {
     required this.timeFrom,
     required this.timeTo,
     required this.description,
-    required this.targetKey,
   });
 
   @override
@@ -193,22 +202,22 @@ class TargetCard extends StatelessWidget {
                 width: ScreenSize().width / 2,
                 child: TextButton(
                   onPressed: () async {
-                    await TargetController().deleteTarget(targetKey).then((_) {
-                      Navigator.popUntil(context,
-                          ModalRoute.withName(TargetHomePage.routeName));
-                      Navigator.of(context)
-                          .pushReplacementNamed(TargetHomePage.routeName);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: ColorChoice().brownPrimary(),
-                          content: SimpleText(
-                            text: "Target has been successfully deleted!",
-                            color: ColorChoice().white(),
-                            weight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    });
+                    // await TargetController().deleteTarget(targetKey).then((_) {
+                    //   Navigator.popUntil(context,
+                    //       ModalRoute.withName(TargetHomePage.routeName));
+                    //   Navigator.of(context)
+                    //       .pushReplacementNamed(TargetHomePage.routeName);
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       backgroundColor: ColorChoice().brownPrimary(),
+                    //       content: SimpleText(
+                    //         text: "Target has been successfully deleted!",
+                    //         color: ColorChoice().white(),
+                    //         weight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //   );
+                    // });
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
