@@ -50,18 +50,9 @@ class TargetHomePage extends StatelessWidget {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // for (int i = 0; i < value.returnedGetTargetsLength; i++)
-                        //   TargetCard(
-                        //     title: value.returnedGetTargets["data"][i]["title"],
-                        //     dateTimeFrom: value.returnedGetTargets["data"][i]
-                        //         ["dateTimeFrom"],
-                        //     dateTimeTo: value.returnedGetTargets["data"][i]
-                        //         ["dateTimeTo"],
-                        //     description: value.returnedGetTargets["data"][i]
-                        //         ["description"],
-                        //   ),
                         for (int i = 0; i < value.returnedGetTargetsLength; i++)
                           TargetCard(
+                            id: value.returnedGetTargets["data"][i]["id"],
                             title: value.returnedGetTargets["data"][i]["title"],
                             date: value.returnedGetTargets["data"][i]
                                 ["dateChosen"],
@@ -174,10 +165,12 @@ class SkeletonTargetList extends StatelessWidget {
 }
 
 class TargetCard extends StatelessWidget {
+  final int id;
   final String title, date, timeFrom, timeTo, description;
 
   const TargetCard({
     super.key,
+    required this.id,
     required this.title,
     required this.date,
     required this.timeFrom,
@@ -187,8 +180,12 @@ class TargetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final targetProvider =
+        Provider.of<TargetController>(context, listen: false);
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        targetProvider.getTargetDetail(id);
+      },
       onLongPress: () {
         showDialog(
           context: context,
@@ -202,22 +199,24 @@ class TargetCard extends StatelessWidget {
                 width: ScreenSize().width / 2,
                 child: TextButton(
                   onPressed: () async {
-                    // await TargetController().deleteTarget(targetKey).then((_) {
-                    //   Navigator.popUntil(context,
-                    //       ModalRoute.withName(TargetHomePage.routeName));
-                    //   Navigator.of(context)
-                    //       .pushReplacementNamed(TargetHomePage.routeName);
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(
-                    //       backgroundColor: ColorChoice().brownPrimary(),
-                    //       content: SimpleText(
-                    //         text: "Target has been successfully deleted!",
-                    //         color: ColorChoice().white(),
-                    //         weight: FontWeight.bold,
-                    //       ),
-                    //     ),
-                    //   );
-                    // });
+                    await targetProvider.deleteTarget(id).then(
+                      (_) {
+                        Navigator.popUntil(context,
+                            ModalRoute.withName(TargetHomePage.routeName));
+                        Navigator.of(context)
+                            .pushReplacementNamed(TargetHomePage.routeName);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: ColorChoice().brownPrimary(),
+                            content: SimpleText(
+                              text: "Target has been successfully deleted!",
+                              color: ColorChoice().white(),
+                              weight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -285,6 +284,8 @@ class TargetCard extends StatelessWidget {
                         padding: EdgeInsets.only(left: ScreenSize().width / 50),
                         child: SimpleText(
                           text: description,
+                          overflow: true,
+                          maxLines: true,
                         ),
                       ),
                     ],

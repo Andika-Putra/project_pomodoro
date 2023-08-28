@@ -9,17 +9,8 @@ import 'package:project_pomodoro/pages/target/models/target.dart';
 import '../../../utilities/print_debug_utility.dart';
 
 class TargetController with ChangeNotifier {
-  Map<String, dynamic> _returnedGetTargets = {};
-  Map<String, dynamic> get returnedGetTargets => _returnedGetTargets;
-  int get returnedGetTargetsLength => _returnedGetTargets["data"].length;
-  late bool _returnedGetTargetsTrigger;
-  bool get returnedGetTargetsTrigger => _returnedGetTargetsTrigger;
-  late bool _returnedGetTargetsNoDataFlag;
-  bool get returnedGetTargetsNoDataFlag => _returnedGetTargetsNoDataFlag;
-
   // Future<void> getTargets() async {
   //   PrintDebug().printGetTargets("Start of function getTargets");
-
   //   try {
   //     _returnedGetTargets = {};
   //     await Future.delayed(
@@ -43,12 +34,10 @@ class TargetController with ChangeNotifier {
   //           ]
   //         }
   //         ''';
-
   //         _returnedGetTargets = jsonDecode(jsonStringData);
   //         PrintDebug().printGetTargets(_returnedGetTargets["data"]);
   //       },
   //     );
-
   //     notifyListeners();
   //   } catch (e) {
   //     PrintDebug().printGetTargets(e);
@@ -56,6 +45,14 @@ class TargetController with ChangeNotifier {
   //     PrintDebug().printGetTargets("End of function getTargets");
   //   }
   // }
+
+  Map<String, dynamic> _returnedGetTargets = {};
+  Map<String, dynamic> get returnedGetTargets => _returnedGetTargets;
+  int get returnedGetTargetsLength => _returnedGetTargets["data"].length;
+  late bool _returnedGetTargetsTrigger;
+  bool get returnedGetTargetsTrigger => _returnedGetTargetsTrigger;
+  late bool _returnedGetTargetsNoDataFlag;
+  bool get returnedGetTargetsNoDataFlag => _returnedGetTargetsNoDataFlag;
 
   Future<void> getTargets() async {
     PrintDebug().printGetTargets("Start of function getTargets");
@@ -65,41 +62,38 @@ class TargetController with ChangeNotifier {
       _returnedGetTargetsNoDataFlag = false;
       _returnedGetTargets = {};
 
-      PrintDebug().printGetTargets(API().baseUri(API.getTargets));
+      PrintDebug().printGetTargets("URI: ${API().baseUri(API.getTargets)}");
 
       var requestBody = {"personId": 1};
 
-      PrintDebug().printGetTargets(json.encode(requestBody));
-      PrintDebug().printGetTargets(utf8.encode(requestBody.toString()).length);
-
-      var requestHeaders = {
-        "Content-Type": "application/json",
-        "Host": "10.0.2.2:44337",
-        "Content-Length": "${utf8.encode(requestBody.toString()).length + 1}"
-      };
-
-      PrintDebug().printGetTargets(requestHeaders);
+      PrintDebug().printGetTargets("Headers: ${API.headers}");
+      PrintDebug().printGetTargets("Encoded Body: ${json.encode(requestBody)}");
 
       await Future.delayed(
         const Duration(seconds: 2),
         () async {
-          // http.Response response =
-          //     await http.get(API().baseUri(API.getTargets));
-
           http.Response response = await http.post(
             API().baseUri(API.getTargets),
-            headers: {
-              "Content-Type": "application/json",
-              "Host": "localhost:44337",
-              "Content-Length":
-                  "${utf8.encode(requestBody.toString()).length + 1}"
-            },
+            headers: API.headers,
             body: json.encode(requestBody),
           );
 
-          _returnedGetTargets = (json.decode(response.body));
-
-          PrintDebug().printGetTargets(_returnedGetTargets);
+          if (response.statusCode == 200) {
+            var responseData = json.decode(response.body);
+            if (responseData["status"] == "0") {
+              PrintDebug().printGetTargets(
+                  "getTargets data is failed to retrieve! Data status code ${responseData["status"]}");
+            } else {
+              _returnedGetTargets = responseData;
+              PrintDebug().printGetTargets("Response Data: $responseData");
+              PrintDebug().printGetTargets(
+                  "getTargets data is successfully retrieved! Data status code ${responseData["status"]}");
+              notifyListeners();
+            }
+          } else {
+            PrintDebug().printGetTargets(
+                "getCares data is successfully retrieved! Data status code ${response.statusCode}");
+          }
         },
       );
     } catch (e) {
@@ -114,26 +108,149 @@ class TargetController with ChangeNotifier {
     }
   }
 
-  Future<void> addTarget(Target target) async {
-    await http.post(
-      API().baseUri(API.targets),
-      body: json.encode(
-        {
-          "title": target.title,
-          "description": target.description,
-          "date": target.date,
-          "timeFrom": target.timeFrom,
-          "timeTo": target.timeTo,
-        },
-      ),
-    );
-    notifyListeners();
+  Map<String, dynamic> _returnedGetTargetDetail = {};
+  Map<String, dynamic> get returnedGetTargetDetail => _returnedGetTargetDetail;
+
+  Future<void> getTargetDetail(int id) async {
+    PrintDebug().printGetTargetDetail("Start of function getTargetDetail");
+
+    try {
+      _returnedGetTargetDetail = {};
+
+      PrintDebug()
+          .printGetTargetDetail("URI: ${API().baseUri(API.getTargetDetail)}");
+
+      var requestBody = {"id": id};
+
+      PrintDebug().printGetTargetDetail("Headers: ${API.headers}");
+      PrintDebug()
+          .printGetTargetDetail("Encoded Body: ${json.encode(requestBody)}");
+
+      http.Response response = await http.post(
+        API().baseUri(API.getTargetDetail),
+        headers: API.headers,
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        if (responseData["status"] == "0") {
+          PrintDebug().printGetTargetDetail(
+              "getTargetDetail data is failed to retrieve! Data status code ${responseData["status"]}");
+        } else {
+          _returnedAddTarget = responseData;
+          PrintDebug().printGetTargetDetail("Response Data: $responseData");
+          PrintDebug().printGetTargetDetail(
+              "getTargetDetail data is successfully retrieved! Data status code ${responseData["status"]}");
+          notifyListeners();
+        }
+      } else {
+        PrintDebug().printGetTargetDetail(
+            "getTargetDetail data is successfully retrieved! Data status code ${response.statusCode}");
+      }
+    } catch (e) {
+      PrintDebug().printGetTargetDetail(e);
+    } finally {
+      PrintDebug().printGetTargetDetail("End of function getTargetDetail");
+    }
   }
 
-  Future<void> deleteTarget(String key) async {
-    await http.delete(
-      API().baseUri("${API.targets}/$key"),
-    );
-    notifyListeners();
+  Map<String, dynamic> _returnedAddTarget = {};
+  Map<String, dynamic> get returnedAddTarget => _returnedAddTarget;
+
+  Future<void> addTarget(Target target) async {
+    PrintDebug().printAddTarget("Start of function addTarget");
+
+    try {
+      _returnedAddTarget = {};
+
+      PrintDebug().printAddTarget("URI: ${API().baseUri(API.addTarget)}");
+
+      var requestBody = {
+        "personId": target.personId,
+        "title": target.title,
+        "description": target.description,
+        "dateChosen": target.dateChosen,
+        "timeFrom": target.timeFrom,
+        "timeTo": target.timeTo,
+      };
+
+      PrintDebug().printAddTarget("Headers: ${API.headers}");
+      PrintDebug().printAddTarget("Encoded Body: ${json.encode(requestBody)}");
+
+      http.Response response = await http.post(
+        API().baseUri(API.addTarget),
+        headers: API.headers,
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        if (responseData["status"] == "0") {
+          PrintDebug().printAddTarget(
+              "addTarget data is failed to retrieve! Data status code ${responseData["status"]}");
+        } else {
+          _returnedAddTarget = responseData;
+          PrintDebug().printAddTarget("Response Data: $responseData");
+          PrintDebug().printAddTarget(
+              "addTarget data is successfully retrieved! Data status code ${responseData["status"]}");
+          notifyListeners();
+        }
+      } else {
+        PrintDebug().printAddTarget(
+            "addTarget data is successfully retrieved! Data status code ${response.statusCode}");
+      }
+    } catch (e) {
+      PrintDebug().printAddTarget(e);
+    } finally {
+      PrintDebug().printAddTarget("End of function addTarget");
+    }
+  }
+
+  Map<String, dynamic> _returnedDeleteTarget = {};
+  Map<String, dynamic> get returnedDeleteTarget => _returnedDeleteTarget;
+
+  Future<void> deleteTarget(int id) async {
+    PrintDebug().printDeleteTarget("Start of function deleteTarget");
+
+    try {
+      _returnedDeleteTarget = {};
+
+      PrintDebug().printDeleteTarget("URI: ${API().baseUri(API.deleteTarget)}");
+
+      var requestBody = {"id": id};
+
+      PrintDebug().printDeleteTarget("Headers: ${API.headers}");
+      PrintDebug()
+          .printDeleteTarget("Encoded Body: ${json.encode(requestBody)}");
+
+      http.Response response = await http.post(
+        API().baseUri(API.deleteTarget),
+        headers: API.headers,
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        if (responseData["status"] == "0") {
+          PrintDebug().printDeleteTarget(
+              "deleteTarget data is failed to retrieve! Data status code ${responseData["status"]}");
+        } else {
+          _returnedGetTargets = responseData;
+          PrintDebug().printDeleteTarget("Response Data: $responseData");
+          PrintDebug().printDeleteTarget(
+              "deleteTarget data is failed to retrieve! Response status code ${responseData["status"]}");
+
+          notifyListeners();
+        }
+      } else {
+        PrintDebug().printDeleteTarget(
+            "deleteTarget data is successfully retrieved! Data status code ${response.statusCode}");
+      }
+    } catch (e) {
+      PrintDebug().printDeleteTarget(e);
+    } finally {
+      PrintDebug().printDeleteTarget("End of function deleteTarget");
+    }
   }
 }

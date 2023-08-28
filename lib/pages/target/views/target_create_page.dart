@@ -386,10 +386,11 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                       await targetProvider
                                           .addTarget(
                                         Target(
+                                          personId: 1,
                                           title: titleController.text,
                                           description:
                                               descriptionController.text,
-                                          date: dateController.text,
+                                          dateChosen: dateController.text,
                                           timeFrom: timeFromController.text,
                                           timeTo: timeToController.text,
                                         ),

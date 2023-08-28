@@ -197,63 +197,63 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SectionGap(),
-            ContainerParent(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Consumer<TargetController>(
-                      builder: (context, value, child) => value
-                                  .returnedGetTargets["data"] !=
-                              null
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SimpleText(
-                                  text: "Your today's target",
-                                  size: 16,
-                                  color: Colors.black87,
-                                  weight: FontWeight.bold,
-                                ),
-                                ParentGap(),
-                                for (int i = 0;
-                                    i < value.returnedGetTargetsLength;
-                                    i++)
-                                  TargetCard(
-                                    title: value.returnedGetTargets["data"][i]
-                                        ["title"],
-                                    dateTimeFrom:
-                                        value.returnedGetTargets["data"][i]
-                                            ["dateTimeFrom"],
-                                    dateTimeTo: value.returnedGetTargets["data"]
-                                        [i]["dateTimeTo"],
-                                  ),
-                                SizedBox(
-                                  width: ScreenSize().width,
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        SimpleText(
-                                          text: "See All",
-                                          color: ColorChoice().brownPrimary(),
-                                          weight: FontWeight.bold,
-                                        ),
-                                        Icon(
-                                          Icons.navigate_next_rounded,
-                                          color: ColorChoice().brownPrimary(),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          : const SkeletonTodaysTarget()),
-                ],
-              ),
-            ),
-            SectionGap(),
+            // ContainerParent(
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Consumer<TargetController>(
+            //           builder: (context, value, child) => value
+            //                       .returnedGetTargets["data"] !=
+            //                   null
+            //               ? Column(
+            //                   crossAxisAlignment: CrossAxisAlignment.start,
+            //                   children: [
+            //                     SimpleText(
+            //                       text: "Your today's target",
+            //                       size: 16,
+            //                       color: Colors.black87,
+            //                       weight: FontWeight.bold,
+            //                     ),
+            //                     ParentGap(),
+            //                     for (int i = 0;
+            //                         i < value.returnedGetTargetsLength;
+            //                         i++)
+            //                       TargetCard(
+            //                         title: value.returnedGetTargets["data"][i]
+            //                             ["title"],
+            //                         dateTimeFrom:
+            //                             value.returnedGetTargets["data"][i]
+            //                                 ["dateTimeFrom"],
+            //                         dateTimeTo: value.returnedGetTargets["data"]
+            //                             [i]["dateTimeTo"],
+            //                       ),
+            //                     SizedBox(
+            //                       width: ScreenSize().width,
+            //                       child: TextButton(
+            //                         onPressed: () {},
+            //                         child: Row(
+            //                           mainAxisAlignment: MainAxisAlignment.end,
+            //                           children: [
+            //                             SimpleText(
+            //                               text: "See All",
+            //                               color: ColorChoice().brownPrimary(),
+            //                               weight: FontWeight.bold,
+            //                             ),
+            //                             Icon(
+            //                               Icons.navigate_next_rounded,
+            //                               color: ColorChoice().brownPrimary(),
+            //                             ),
+            //                           ],
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 )
+            //               : const SkeletonTodaysTarget()),
+            //     ],
+            //   ),
+            // ),
+            // SectionGap(),
             ContainerParent(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
