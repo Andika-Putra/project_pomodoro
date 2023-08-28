@@ -5,6 +5,7 @@ import 'package:project_pomodoro/pages/home/controllers/home_controller.dart';
 import 'package:project_pomodoro/pages/home/views/home_page.dart';
 import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
 import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
+import 'package:project_pomodoro/pages/target/views/target_detail_page.dart';
 import 'package:project_pomodoro/pages/target/views/target_home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           HomePage.routeName: (context) => HomePage(),
           TargetHomePage.routeName: (context) => TargetHomePage(),
           TargetCreatePage.routeName: (context) => TargetCreatePage(),
+          TargetDetailPage.routeName: (context) => TargetDetailPage(),
         },
       ),
     );

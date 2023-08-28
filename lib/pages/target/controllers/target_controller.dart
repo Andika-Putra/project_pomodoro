@@ -138,7 +138,7 @@ class TargetController with ChangeNotifier {
           PrintDebug().printGetTargetDetail(
               "getTargetDetail data is failed to retrieve! Data status code ${responseData["status"]}");
         } else {
-          _returnedAddTarget = responseData;
+          _returnedGetTargetDetail = responseData;
           PrintDebug().printGetTargetDetail("Response Data: $responseData");
           PrintDebug().printGetTargetDetail(
               "getTargetDetail data is successfully retrieved! Data status code ${responseData["status"]}");

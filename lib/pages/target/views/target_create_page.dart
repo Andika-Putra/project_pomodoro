@@ -18,14 +18,13 @@ import '../controllers/target_controller.dart';
 class TargetCreatePage extends StatefulWidget {
   TargetCreatePage({super.key});
 
-  static const routeName = '/target-create';
+  static const routeName = '/target/create';
 
   @override
   State<TargetCreatePage> createState() => _TargetCreatePageState();
 }
 
 class _TargetCreatePageState extends State<TargetCreatePage> {
-  final createTargetFormKey = GlobalKey<FormState>();
   late final TextEditingController titleController;
   late final TextEditingController descriptionController;
   late final TextEditingController dateController;

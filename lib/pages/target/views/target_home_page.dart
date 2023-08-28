@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
 import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
+import 'package:project_pomodoro/pages/target/views/target_detail_page.dart';
 import 'package:project_pomodoro/resources/container_resource.dart';
 import 'package:project_pomodoro/resources/gap_resource.dart';
 import 'package:project_pomodoro/resources/page_resource.dart';
@@ -15,7 +16,7 @@ import '../../../resources/appbar_resource.dart';
 import '../../../resources/color_choice_resource.dart';
 
 class TargetHomePage extends StatelessWidget {
-  static const routeName = '/target-home';
+  static const routeName = '/target/home';
 
   bool getTargetsTrigger = true;
 
@@ -184,7 +185,9 @@ class TargetCard extends StatelessWidget {
         Provider.of<TargetController>(context, listen: false);
     return TextButton(
       onPressed: () {
-        targetProvider.getTargetDetail(id);
+        // targetProvider.getTargetDetail(id);
+        Navigator.of(context)
+            .pushNamed(TargetDetailPage.routeName, arguments: {"id": id});
       },
       onLongPress: () {
         showDialog(
