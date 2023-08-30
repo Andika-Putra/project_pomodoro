@@ -9,11 +9,13 @@ class TemplatePage extends StatefulWidget {
   final String defineType;
   final Color? colorRefresh;
   final Widget child;
+  final Object? arguments;
 
   const TemplatePage({
     required this.defineType,
     this.colorRefresh,
     required this.child,
+    this.arguments,
   });
 
   @override
@@ -36,7 +38,8 @@ class _TemplatePageState extends State<TemplatePage> {
           () {
             // print("Refresh Succeed");
             Navigator.of(context).pushReplacementNamed(
-                ModalRoute.of(context)!.settings.name.toString());
+                ModalRoute.of(context)!.settings.name.toString(),
+                arguments: widget.arguments);
           },
         );
       },

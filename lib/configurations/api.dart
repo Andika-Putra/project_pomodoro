@@ -5,6 +5,7 @@ class API {
   static const getTargetDetail = "target/getTargetDetail";
   static const addTarget = "target/addTarget";
   static const deleteTarget = "target/deleteTarget";
+  static const updateTarget = "target/updateTarget";
 
   static const headers = {
     "Content-Type": "application/json",

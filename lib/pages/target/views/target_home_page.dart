@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
 import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
 import 'package:project_pomodoro/pages/target/views/target_detail_page.dart';
@@ -47,7 +48,7 @@ class TargetHomePage extends StatelessWidget {
         child: Consumer<TargetController>(
           builder: (context, value, child) => value.returnedGetTargetsTrigger ==
                   true
-              ? value.returnedGetTargets.isNotEmpty
+              ? value.returnedGetTargets["data"].isNotEmpty
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -263,7 +264,9 @@ class TargetCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SimpleText(text: date),
+                      SimpleText(
+                          text: DateFormat('d MMMM y')
+                              .format(DateTime.parse(date))),
                       SimpleText(
                         text: "$timeFrom - $timeTo",
                       ),

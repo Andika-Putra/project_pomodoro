@@ -1,17 +1,19 @@
 class Target {
-  int personId;
-  String title;
-  String description;
-  String dateChosen;
-  String timeFrom;
-  String timeTo;
+  int? id;
+  int? personId;
+  String? title;
+  String? description;
+  String? dateChosen;
+  String? timeFrom;
+  String? timeTo;
 
   Target({
-    required this.personId,
-    required this.title,
-    required this.description,
-    required this.dateChosen,
-    required this.timeFrom,
-    required this.timeTo,
+    this.id,
+    this.personId,
+    this.title,
+    this.description,
+    this.dateChosen,
+    this.timeFrom,
+    this.timeTo,
   });
 }

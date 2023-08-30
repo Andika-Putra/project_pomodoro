@@ -73,6 +73,7 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
         ),
       ),
       body: TemplatePage(
+        colorRefresh: ColorChoice().brownPrimary(),
         defineType: "",
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,9 +169,12 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                           setState(
                                             () {
                                               date = value;
-                                              dateController.text =
-                                                  DateFormat('d MMMM y')
-                                                      .format(date);
+                                              dateController.text = value
+                                                  .toString()
+                                                  .substring(
+                                                      0,
+                                                      value.toString().length -
+                                                          4);
                                             },
                                           );
                                         }
@@ -314,7 +318,7 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
       ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(right: ScreenSize().width / 20),
-        height: ScreenSize().heightAppBar,
+        height: ScreenSize().heightAppBar * 1.5,
         width: ScreenSize().width,
         color: Colors.transparent,
         child: Align(

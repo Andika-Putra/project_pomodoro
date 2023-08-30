@@ -126,28 +126,33 @@ class TargetController with ChangeNotifier {
       PrintDebug()
           .printGetTargetDetail("Encoded Body: ${json.encode(requestBody)}");
 
-      http.Response response = await http.post(
-        API().baseUri(API.getTargetDetail),
-        headers: API.headers,
-        body: json.encode(requestBody),
-      );
+      await Future.delayed(
+        const Duration(seconds: 2),
+        () async {
+          http.Response response = await http.post(
+            API().baseUri(API.getTargetDetail),
+            headers: API.headers,
+            body: json.encode(requestBody),
+          );
 
-      if (response.statusCode == 200) {
-        var responseData = json.decode(response.body);
-        if (responseData["status"] == "0") {
-          PrintDebug().printGetTargetDetail(
-              "getTargetDetail data is failed to retrieve! Data status code ${responseData["status"]}");
-        } else {
-          _returnedGetTargetDetail = responseData;
-          PrintDebug().printGetTargetDetail("Response Data: $responseData");
-          PrintDebug().printGetTargetDetail(
-              "getTargetDetail data is successfully retrieved! Data status code ${responseData["status"]}");
-          notifyListeners();
-        }
-      } else {
-        PrintDebug().printGetTargetDetail(
-            "getTargetDetail data is successfully retrieved! Data status code ${response.statusCode}");
-      }
+          if (response.statusCode == 200) {
+            var responseData = json.decode(response.body);
+            if (responseData["status"] == "0") {
+              PrintDebug().printGetTargetDetail(
+                  "getTargetDetail data is failed to retrieve! Data status code ${responseData["status"]}");
+            } else {
+              _returnedGetTargetDetail = responseData;
+              PrintDebug().printGetTargetDetail("Response Data: $responseData");
+              PrintDebug().printGetTargetDetail(
+                  "getTargetDetail data is successfully retrieved! Data status code ${responseData["status"]}");
+              notifyListeners();
+            }
+          } else {
+            PrintDebug().printGetTargetDetail(
+                "getTargetDetail data is failed to retrieve! Response status code ${response.statusCode}");
+          }
+        },
+      );
     } catch (e) {
       PrintDebug().printGetTargetDetail(e);
     } finally {
@@ -198,7 +203,7 @@ class TargetController with ChangeNotifier {
         }
       } else {
         PrintDebug().printAddTarget(
-            "addTarget data is successfully retrieved! Data status code ${response.statusCode}");
+            "addTarget data is failed to be retrieved! Data status code ${response.statusCode}");
       }
     } catch (e) {
       PrintDebug().printAddTarget(e);
@@ -251,6 +256,60 @@ class TargetController with ChangeNotifier {
       PrintDebug().printDeleteTarget(e);
     } finally {
       PrintDebug().printDeleteTarget("End of function deleteTarget");
+    }
+  }
+
+  Map<String, dynamic> _returnedUpdateTarget = {};
+  Map<String, dynamic> get returnedUpdateTarget => _returnedUpdateTarget;
+
+  Future<void> updateTarget(Target target) async {
+    PrintDebug().printUpdateTarget("Start of function updateTarget");
+
+    try {
+      _returnedUpdateTarget = {};
+
+      PrintDebug().printUpdateTarget("URI: ${API().baseUri(API.updateTarget)}");
+
+      var requestBody = {
+        "id": target.id,
+        "title": target.title,
+        "description": target.description,
+        "dateChosen": target.dateChosen,
+        "timeFrom": target.timeFrom,
+        "timeTo": target.timeTo
+      };
+
+      PrintDebug().printUpdateTarget("Headers: ${API.headers}");
+      PrintDebug()
+          .printUpdateTarget("Encoded Body: ${json.encode(requestBody)}");
+
+      http.Response response = await http.post(
+        API().baseUri(API.updateTarget),
+        headers: API.headers,
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        if (responseData["status"] == "0") {
+          PrintDebug().printUpdateTarget(
+              "updateTarget data is failed to retrieve! Data status code ${responseData["status"]}");
+        } else {
+          _returnedGetTargets = responseData;
+          PrintDebug().printUpdateTarget("Response Data: $responseData");
+          PrintDebug().printUpdateTarget(
+              "updateTarget data is successfully retrieved! Data status code ${responseData["status"]}");
+
+          notifyListeners();
+        }
+      } else {
+        PrintDebug().printUpdateTarget(
+            "updateTarget data is failed to retrieve! Response status code ${response.statusCode}");
+      }
+    } catch (e) {
+      PrintDebug().printUpdateTarget(e);
+    } finally {
+      PrintDebug().printUpdateTarget("End of function updateTarget");
     }
   }
 }
