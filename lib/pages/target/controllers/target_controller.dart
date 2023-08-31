@@ -54,7 +54,7 @@ class TargetController with ChangeNotifier {
   late bool _returnedGetTargetsNoDataFlag;
   bool get returnedGetTargetsNoDataFlag => _returnedGetTargetsNoDataFlag;
 
-  Future<void> getTargets() async {
+  Future<void> getTargets(int id) async {
     PrintDebug().printGetTargets("Start of function getTargets");
 
     try {
@@ -64,9 +64,9 @@ class TargetController with ChangeNotifier {
 
       PrintDebug().printGetTargets("URI: ${API().baseUri(API.getTargets)}");
 
-      var requestBody = {"personId": 1};
+      var requestBody = {"personId": id};
 
-      PrintDebug().printGetTargets("Headers: ${API.headers}");
+      PrintDebug().printGetTargets("Headers: ${API().headersWithAuth}");
       PrintDebug().printGetTargets("Encoded Body: ${json.encode(requestBody)}");
 
       await Future.delayed(
@@ -74,7 +74,7 @@ class TargetController with ChangeNotifier {
         () async {
           http.Response response = await http.post(
             API().baseUri(API.getTargets),
-            headers: API.headers,
+            headers: API().headersWithAuth,
             body: json.encode(requestBody),
           );
 
@@ -92,7 +92,7 @@ class TargetController with ChangeNotifier {
             }
           } else {
             PrintDebug().printGetTargets(
-                "getCares data is successfully retrieved! Data status code ${response.statusCode}");
+                "getCares data is failed to retrieve! Data status code ${response.statusCode}");
           }
         },
       );
@@ -122,7 +122,7 @@ class TargetController with ChangeNotifier {
 
       var requestBody = {"id": id};
 
-      PrintDebug().printGetTargetDetail("Headers: ${API.headers}");
+      PrintDebug().printGetTargetDetail("Headers: ${API().headersWithAuth}");
       PrintDebug()
           .printGetTargetDetail("Encoded Body: ${json.encode(requestBody)}");
 
@@ -131,7 +131,7 @@ class TargetController with ChangeNotifier {
         () async {
           http.Response response = await http.post(
             API().baseUri(API.getTargetDetail),
-            headers: API.headers,
+            headers: API().headersWithAuth,
             body: json.encode(requestBody),
           );
 
@@ -180,12 +180,12 @@ class TargetController with ChangeNotifier {
         "timeTo": target.timeTo,
       };
 
-      PrintDebug().printAddTarget("Headers: ${API.headers}");
+      PrintDebug().printAddTarget("Headers: ${API().headersWithAuth}");
       PrintDebug().printAddTarget("Encoded Body: ${json.encode(requestBody)}");
 
       http.Response response = await http.post(
         API().baseUri(API.addTarget),
-        headers: API.headers,
+        headers: API().headersWithAuth,
         body: json.encode(requestBody),
       );
 
@@ -225,13 +225,13 @@ class TargetController with ChangeNotifier {
 
       var requestBody = {"id": id};
 
-      PrintDebug().printDeleteTarget("Headers: ${API.headers}");
+      PrintDebug().printDeleteTarget("Headers: ${API().headersWithAuth}");
       PrintDebug()
           .printDeleteTarget("Encoded Body: ${json.encode(requestBody)}");
 
       http.Response response = await http.post(
         API().baseUri(API.deleteTarget),
-        headers: API.headers,
+        headers: API().headersWithAuth,
         body: json.encode(requestBody),
       );
 
@@ -279,13 +279,13 @@ class TargetController with ChangeNotifier {
         "timeTo": target.timeTo
       };
 
-      PrintDebug().printUpdateTarget("Headers: ${API.headers}");
+      PrintDebug().printUpdateTarget("Headers: ${API().headersWithAuth}");
       PrintDebug()
           .printUpdateTarget("Encoded Body: ${json.encode(requestBody)}");
 
       http.Response response = await http.post(
         API().baseUri(API.updateTarget),
-        headers: API.headers,
+        headers: API().headersWithAuth,
         body: json.encode(requestBody),
       );
 

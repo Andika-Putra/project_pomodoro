@@ -54,10 +54,10 @@ class _HomePageState extends State<HomePage> {
       getPomodoroFaqsTrigger = false;
     }
 
-    if (getTargetsTrigger == true) {
-      targetProvider.getTargets();
-      getTargetsTrigger = false;
-    }
+    // if (getTargetsTrigger == true) {
+    //   targetProvider.getTargets();
+    //   getTargetsTrigger = false;
+    // }
 
     if (getOtherFaqsTrigger == true) {
       homeProvider.getOtherFaqs();

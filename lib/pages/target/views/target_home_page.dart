@@ -11,6 +11,7 @@ import 'package:project_pomodoro/resources/page_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
 import 'package:project_pomodoro/resources/skeleton_resourse.dart';
 import 'package:project_pomodoro/resources/text_resource.dart';
+import 'package:project_pomodoro/utilities/shared_prefs_utility.dart';
 import 'package:provider/provider.dart';
 
 import '../../../resources/appbar_resource.dart';
@@ -26,7 +27,11 @@ class TargetHomePage extends StatelessWidget {
     final targetProvider =
         Provider.of<TargetController>(context, listen: false);
     if (getTargetsTrigger == true) {
-      targetProvider.getTargets();
+      targetProvider.getTargets(
+        int.parse(
+          SharedPrefs(key: 'id').getSharedPrefsValue,
+        ),
+      );
       getTargetsTrigger = false;
     }
 
@@ -39,7 +44,7 @@ class TargetHomePage extends StatelessWidget {
         ),
         title: AppBarTitle(
           title: "Target",
-          iconColor: ColorChoice().brownPrimary(),
+          color: ColorChoice().brownPrimary(),
         ),
       ),
       body: TemplatePage(

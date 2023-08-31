@@ -20,7 +20,7 @@ class ScreenSize {
           .toDouble();
   final double _heightAppBar = AppBar().preferredSize.height;
 
-  double get heightFullScreen => _heightFullScreen - _heightNavigationBar;
+  double get heightFullScreen => _heightFullScreen;
   double get width => _widthFullScreen;
   double get heightAppBar => _heightAppBar;
   double get heightBody =>

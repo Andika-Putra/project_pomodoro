@@ -76,9 +76,9 @@ class ContainerParent extends StatelessWidget {
       padding: EdgeInsets.all(
         ScreenSize().width / 30,
       ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.white,
+      // ),
       child: child,
     );
   }

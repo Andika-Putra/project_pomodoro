@@ -81,7 +81,7 @@ class _TargetDetailPageState extends State<TargetDetailPage> {
         ),
         title: AppBarTitle(
           title: "Target Detail",
-          iconColor: ColorChoice().brownPrimary(),
+          color: ColorChoice().brownPrimary(),
         ),
         actions: [
           Container(
@@ -506,7 +506,7 @@ class SkeletonForm extends StatelessWidget {
             ),
           ),
           SmallGap(),
-          Container(
+          SizedBox(
             width: ScreenSize().width,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

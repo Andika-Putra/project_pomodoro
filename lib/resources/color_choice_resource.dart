@@ -10,6 +10,7 @@ class ColorChoice {
   final List<Color> brownSelection = [
     const Color(0xFFCC7351),
     const Color(0xFFF1DFD6),
+    const Color(0xFFE5D9B6)
   ];
 
   Color greenPrimary() {
@@ -30,6 +31,10 @@ class ColorChoice {
 
   Color brownSecondary() {
     return brownSelection[1];
+  }
+
+  Color brownTertiary() {
+    return brownSelection[2];
   }
 
   Color white() {

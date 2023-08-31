@@ -69,11 +69,11 @@ class AppBarLeading extends StatelessWidget {
  */
 class AppBarTitle extends StatelessWidget {
   final String title;
-  final Color iconColor;
+  final Color color;
 
   AppBarTitle({
     required this.title,
-    required this.iconColor,
+    required this.color,
   });
 
   @override
@@ -81,7 +81,7 @@ class AppBarTitle extends StatelessWidget {
     return SimpleText(
       text: title,
       size: 20,
-      color: iconColor,
+      color: color,
     );
   }
 }

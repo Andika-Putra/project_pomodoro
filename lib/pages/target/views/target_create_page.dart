@@ -9,6 +9,7 @@ import 'package:project_pomodoro/resources/gap_resource.dart';
 import 'package:project_pomodoro/resources/page_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
 import 'package:project_pomodoro/resources/text_resource.dart';
+import 'package:project_pomodoro/utilities/shared_prefs_utility.dart';
 import 'package:provider/provider.dart';
 
 import '../../../resources/appbar_resource.dart';
@@ -69,7 +70,7 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
         ),
         title: AppBarTitle(
           title: "Create New Target",
-          iconColor: ColorChoice().brownPrimary(),
+          color: ColorChoice().brownPrimary(),
         ),
       ),
       body: TemplatePage(
@@ -389,7 +390,9 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                       await targetProvider
                                           .addTarget(
                                         Target(
-                                          personId: 1,
+                                          personId: int.parse(
+                                              SharedPrefs(key: 'id')
+                                                  .getSharedPrefsValue),
                                           title: titleController.text,
                                           description:
                                               descriptionController.text,
