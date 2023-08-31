@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:project_pomodoro/resources/color_choice_resource.dart';
+import 'package:project_pomodoro/resources/loading_resource.dart';
 import 'package:project_pomodoro/resources/page_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   late final TextEditingController nameController;
   late final TextEditingController emailController;
+
+  bool signUpTrigger = false;
 
   @override
   void initState() {
@@ -91,41 +94,59 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   LargeGap(),
                   ContainerParent(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        await accountProvider
-                            .addPerson(
-                          nameController.text,
-                          emailController.text,
-                        )
-                            .then((_) {
-                          // if (accountProvider.returnedAddPerson.isNotEmpty) {
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                    child: signUpTrigger == false
+                        ? ElevatedButton(
+                            onPressed: () async {
+                              setState(
+                                () {
+                                  signUpTrigger = true;
+                                },
+                              );
+                              await accountProvider
+                                  .addPerson(
+                                nameController.text,
+                                emailController.text,
+                              )
+                                  .then(
+                                (_) {
+                                  // if (accountProvider.returnedAddPerson.isNotEmpty) {
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor:
+                                          ColorChoice().greenPrimary(),
+                                      content: SimpleText(
+                                        text:
+                                            "Account has been signed up successfully!",
+                                        color: ColorChoice().white(),
+                                        weight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  );
+                                  // }
+                                },
+                              );
+                              setState(
+                                () {
+                                  if (accountProvider
+                                      .returnedAddPerson.isEmpty) {
+                                    signUpTrigger = false;
+                                  }
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
                               backgroundColor: ColorChoice().greenPrimary(),
-                              content: SimpleText(
-                                text:
-                                    "Account has been signed up successfully!",
-                                color: ColorChoice().white(),
-                                weight: FontWeight.bold,
-                              ),
                             ),
-                          );
-                          // }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorChoice().greenPrimary(),
-                      ),
-                      child: SimpleText(
-                        text: "Sign Up",
-                        size: 16,
-                        weight: FontWeight.bold,
-                        color: ColorChoice().white(),
-                      ),
-                    ),
-                  )
+                            child: SimpleText(
+                              text: "Sign Up",
+                              size: 16,
+                              weight: FontWeight.bold,
+                              color: ColorChoice().white(),
+                            ),
+                          )
+                        : Loading().indicatorCircleStrokeSpinOnly(),
+                  ),
                 ],
               ),
               Row(

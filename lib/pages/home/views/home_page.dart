@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_pomodoro/pages/home/controllers/home_controller.dart';
-import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
+// import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
 import 'package:project_pomodoro/pages/target/views/target_home_page.dart';
 import 'package:project_pomodoro/resources/appbar_resource.dart';
 import 'package:project_pomodoro/resources/color_choice_resource.dart';
@@ -36,8 +36,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeController>(context, listen: false);
-    final targetProvider =
-        Provider.of<TargetController>(context, listen: false);
+    // final targetProvider =
+    //     Provider.of<TargetController>(context, listen: false);
     if (explorePomodoroTrigger == true) {
       Future.delayed(
         const Duration(seconds: 2),

@@ -401,28 +401,30 @@ class _TargetCreatePageState extends State<TargetCreatePage> {
                                           timeTo: timeToController.text,
                                         ),
                                       )
-                                          .then((_) {
-                                        Navigator.popUntil(
-                                            context,
-                                            ModalRoute.withName(
-                                                TargetHomePage.routeName));
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                TargetHomePage.routeName);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            backgroundColor:
-                                                ColorChoice().brownPrimary(),
-                                            content: SimpleText(
-                                              text:
-                                                  "Target has been successfully created!",
-                                              color: ColorChoice().white(),
-                                              weight: FontWeight.bold,
+                                          .then(
+                                        (_) {
+                                          Navigator.popUntil(
+                                              context,
+                                              ModalRoute.withName(
+                                                  TargetHomePage.routeName));
+                                          Navigator.of(context)
+                                              .pushReplacementNamed(
+                                                  TargetHomePage.routeName);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              backgroundColor:
+                                                  ColorChoice().brownPrimary(),
+                                              content: SimpleText(
+                                                text:
+                                                    "Target has been successfully created!",
+                                                color: ColorChoice().white(),
+                                                weight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      });
+                                          );
+                                        },
+                                      );
                                       // Navigator.popUntil(
                                       //     context,
                                       //     ModalRoute.withName(

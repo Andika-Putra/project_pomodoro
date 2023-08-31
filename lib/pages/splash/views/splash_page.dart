@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:project_pomodoro/pages/account/views/sign_in_page.dart';
-import 'package:project_pomodoro/pages/home/views/home_page.dart';
 import 'package:project_pomodoro/resources/color_choice_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
 

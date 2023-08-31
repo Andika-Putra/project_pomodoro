@@ -5,6 +5,7 @@ import 'package:project_pomodoro/pages/account/views/sign_up_page.dart';
 import 'package:project_pomodoro/pages/home/views/home_page.dart';
 import 'package:project_pomodoro/resources/color_choice_resource.dart';
 import 'package:project_pomodoro/resources/container_resource.dart';
+import 'package:project_pomodoro/resources/loading_resource.dart';
 import 'package:project_pomodoro/resources/page_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
 import 'package:project_pomodoro/resources/text_resource.dart';
@@ -22,6 +23,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   late final TextEditingController emailController;
+  bool signInTrigger = false;
 
   @override
   void initState() {
@@ -74,41 +76,87 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   LargeGap(),
                   ContainerParent(
-                    child: TextBox(
-                      controller: emailController,
-                      hintText: "E-mail",
-                      icon: Icons.person_outlined,
+                    child: Column(
+                      children: [
+                        TextBox(
+                          controller: emailController,
+                          hintText: "E-mail",
+                          icon: Icons.person_outlined,
+                        ),
+                      ],
                     ),
                   ),
                   LargeGap(),
                   ContainerParent(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        await accountProvider
-                            .authenticatePerson(emailController.text)
-                            .then((_) {
-                          if (accountProvider
-                              .returnedAuthenticatePerson.isNotEmpty) {
-                            if (accountProvider
-                                        .returnedAuthenticatePerson["data"]
-                                    ["token"] !=
-                                null) {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(HomePage.routeName);
-                            }
-                          }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorChoice().greenPrimary(),
-                      ),
-                      child: SimpleText(
-                        text: "Sign In",
-                        size: 16,
-                        weight: FontWeight.bold,
-                        color: ColorChoice().white(),
-                      ),
-                    ),
+                    child: signInTrigger == false
+                        ? ElevatedButton(
+                            onPressed: () async {
+                              setState(
+                                () {
+                                  signInTrigger = true;
+                                },
+                              );
+                              await accountProvider
+                                  .authenticatePerson(emailController.text)
+                                  .then(
+                                (_) {
+                                  if (accountProvider
+                                      .returnedAuthenticatePerson.isNotEmpty) {
+                                    if (accountProvider
+                                                .returnedAuthenticatePerson[
+                                            "data"]["token"] !=
+                                        null) {
+                                      Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              HomePage.routeName);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor:
+                                              ColorChoice().greenPrimary(),
+                                          content: SimpleText(
+                                            text: "Sign in succeed",
+                                            color: ColorChoice().white(),
+                                            weight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                              );
+                              setState(
+                                () {
+                                  if (accountProvider
+                                      .returnedAuthenticatePerson.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor:
+                                            ColorChoice().brownPrimary(),
+                                        content: SimpleText(
+                                          text:
+                                              "Sign in failed, please check your e-mail again",
+                                          color: ColorChoice().white(),
+                                          weight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    );
+                                    signInTrigger = false;
+                                  }
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ColorChoice().greenPrimary(),
+                            ),
+                            child: SimpleText(
+                              text: "Sign In",
+                              size: 16,
+                              weight: FontWeight.bold,
+                              color: ColorChoice().white(),
+                            ),
+                          )
+                        : Loading().indicatorCircleStrokeSpinOnly(),
                   )
                 ],
               ),
