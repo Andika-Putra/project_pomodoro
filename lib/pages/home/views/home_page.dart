@@ -228,36 +228,14 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SimpleText(
-                                  text: "Your today's target",
+                                  text: "Your available targets",
                                   size: 16,
                                   color: Colors.black87,
                                   weight: FontWeight.bold,
                                 ),
                                 ParentGap(),
                                 targets(value.returnedGetTargetsLength),
-                                SizedBox(
-                                  width: ScreenSize().width,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pushNamed(TargetHomePage.routeName);
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        SimpleText(
-                                          text: "See All",
-                                          color: ColorChoice().brownPrimary(),
-                                          weight: FontWeight.bold,
-                                        ),
-                                        Icon(
-                                          Icons.navigate_next_rounded,
-                                          color: ColorChoice().brownPrimary(),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                targetsSeeAll(value.returnedGetTargetsLength),
                               ],
                             )
                           : const SkeletonTodaysTarget()),
@@ -315,9 +293,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget targets(int length) {
-    final targetProvider =
-        Provider.of<TargetController>(context, listen: false);
-
     if (length == 0) {
       return Consumer<TargetController>(
         builder: (context, value, child) => Column(
@@ -327,7 +302,7 @@ class _HomePageState extends State<HomePage> {
                 text:
                     "Oops, looks like you haven’t add any target today. Let’s add at least one."),
             MediumGap(),
-            const AddTargetCard(),
+            // const AddTargetCard(),
           ],
         ),
       );
@@ -362,7 +337,94 @@ class _HomePageState extends State<HomePage> {
                 timeTo: value.returnedGetTargets["data"][i]["timeTo"],
                 description: value.returnedGetTargets["data"][i]["description"],
               ),
-            const AddTargetCard(),
+            // const AddTargetCard(),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget targetsSeeAll(int length) {
+    if (length == 0) {
+      return SizedBox(
+        width: ScreenSize().width,
+        child: TextButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(TargetHomePage.routeName);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SimpleText(
+                text: "Go to Target",
+                color: ColorChoice().brownPrimary(),
+                weight: FontWeight.bold,
+              ),
+              Icon(
+                Icons.navigate_next_rounded,
+                color: ColorChoice().brownPrimary(),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    // else if (length >= 3) {
+    //   return SizedBox(
+    //     width: ScreenSize().width,
+    //     child: TextButton(
+    //       onPressed: () {
+    //         Navigator.of(context).pushNamed(TargetHomePage.routeName);
+    //       },
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.end,
+    //         children: [
+    //           SimpleText(
+    //             text: "See All",
+    //             color: ColorChoice().brownPrimary(),
+    //             weight: FontWeight.bold,
+    //           ),
+    //           Icon(
+    //             Icons.navigate_next_rounded,
+    //             color: ColorChoice().brownPrimary(),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
+    else {
+      return SizedBox(
+        width: ScreenSize().width,
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(TargetHomePage.routeName);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SimpleText(
+                    text: "Go to Target",
+                    color: ColorChoice().brownPrimary(),
+                    weight: FontWeight.bold,
+                  ),
+                  Icon(
+                    Icons.navigate_next_rounded,
+                    color: ColorChoice().brownPrimary(),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: SimpleText(
+                text: length >= 3
+                    ? "Showing 3 of $length available Target(s)"
+                    : "Showing $length of $length available Target(s)",
+              ),
+            ),
           ],
         ),
       );
@@ -559,8 +621,8 @@ class TargetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.of(context)
-            .pushNamed(TargetDetailPage.routeName, arguments: {"id": id});
+        // Navigator.of(context)
+        //     .pushNamed(TargetDetailPage.routeName, arguments: {"id": id});
       },
       child: ContainerChild(
         child: Column(
@@ -676,61 +738,6 @@ class AddTargetCard extends StatelessWidget {
     );
   }
 }
-
-// class TargetCard extends StatelessWidget {
-//   final String title, timeFrom, dateTimeTo;
-
-//   const TargetCard({
-//     super.key,
-//     required this.title,
-//     required this.dateTimeFrom,
-//     required this.dateTimeTo,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextButton(
-//       onPressed: () {},
-//       child: ContainerChild(
-//         child: Column(
-//           children: [
-//             SimpleText(
-//               text: title,
-//               size: 16,
-//               weight: FontWeight.bold,
-//             ),
-//             ParentGap(),
-//             Row(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Icon(
-//                   Icons.access_time_rounded,
-//                   color: ColorChoice().brownPrimary(),
-//                 ),
-//                 Padding(
-//                   padding: EdgeInsets.only(left: ScreenSize().width / 50),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       SimpleText(
-//                         text:
-//                             "${DateFormat('EEEE, d MMM y').format(DateTime.parse(dateTimeFrom))}",
-//                       ),
-//                       SimpleText(
-//                         text:
-//                             "${DateFormat('Hm').format(DateTime.parse(dateTimeFrom))} - ${DateFormat('Hm').format(DateTime.parse(dateTimeTo))}",
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class FeatureButton extends StatelessWidget {
   final Color color;
