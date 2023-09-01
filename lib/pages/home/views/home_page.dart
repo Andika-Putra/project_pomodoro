@@ -3,19 +3,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_pomodoro/pages/home/controllers/home_controller.dart';
+import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
 // import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
 import 'package:project_pomodoro/pages/target/views/target_home_page.dart';
 import 'package:project_pomodoro/resources/appbar_resource.dart';
 import 'package:project_pomodoro/resources/color_choice_resource.dart';
 import 'package:project_pomodoro/resources/container_resource.dart';
 import 'package:project_pomodoro/resources/dropdown_resource.dart';
+import 'package:project_pomodoro/resources/font_size_resource.dart';
 import 'package:project_pomodoro/resources/gap_resource.dart';
 import 'package:project_pomodoro/resources/page_resource.dart';
 import 'package:project_pomodoro/resources/skeleton_resourse.dart';
 import 'package:project_pomodoro/resources/text_resource.dart';
+import 'package:project_pomodoro/utilities/shared_prefs_utility.dart';
 import 'package:provider/provider.dart';
 
 import '../../../resources/screen_size_resource.dart';
+import '../../target/controllers/target_controller.dart';
+import '../../target/views/target_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
@@ -27,17 +32,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool explorePomodoroTrigger = true;
 
-  bool getPomodoroFaqsTrigger = true;
-
-  bool getOtherFaqsTrigger = true;
-
+  bool getPomodoroFAQsTrigger = true;
   bool getTargetsTrigger = true;
+  bool getOthersFAQsTrigger = true;
 
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeController>(context, listen: false);
-    // final targetProvider =
-    //     Provider.of<TargetController>(context, listen: false);
+    final targetProvider =
+        Provider.of<TargetController>(context, listen: false);
     if (explorePomodoroTrigger == true) {
       Future.delayed(
         const Duration(seconds: 2),
@@ -49,20 +52,36 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    if (getPomodoroFaqsTrigger == true) {
-      homeProvider.getPomodoroFaqs();
-      getPomodoroFaqsTrigger = false;
+    if (getPomodoroFAQsTrigger == true) {
+      homeProvider.getPomodoroFAQs();
+      getPomodoroFAQsTrigger = false;
     }
+
+    if (getTargetsTrigger == true) {
+      targetProvider
+          .getTargets(int.parse(SharedPrefs(key: 'id').getSharedPrefsValue));
+      getTargetsTrigger = false;
+    }
+
+    if (getOthersFAQsTrigger == true) {
+      homeProvider.getOthersFAQs();
+      getOthersFAQsTrigger = false;
+    }
+
+    // if (getPomodoroFaqsTrigger == true) {
+    //   homeProvider.getPomodoroFaqs();
+    //   getPomodoroFaqsTrigger = false;
+    // }
 
     // if (getTargetsTrigger == true) {
     //   targetProvider.getTargets();
     //   getTargetsTrigger = false;
     // }
 
-    if (getOtherFaqsTrigger == true) {
-      homeProvider.getOtherFaqs();
-      getOtherFaqsTrigger = false;
-    }
+    // if (getOtherFaqsTrigger == true) {
+    //   homeProvider.getOtherFaqs();
+    //   getOtherFaqsTrigger = false;
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -145,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.center,
                     child: Consumer<HomeController>(
                       builder: (context, value, child) =>
-                          value.returnedGetPomodoroFaqs["data"] != null
+                          value.returnedGetPomodoroFAQs["data"] != null
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -160,17 +179,17 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     MediumGap(),
                                     for (int i = 0;
-                                        i < value.returnedGetPomodoroFaqsLength;
+                                        i < value.returnedGetPomodoroFAQsLength;
                                         i++)
                                       TemplateDropDown(
                                         question: value
-                                                .returnedGetPomodoroFaqs["data"]
+                                                .returnedGetPomodoroFAQs["data"]
                                             [i]["question"],
                                         answer: value
-                                                .returnedGetPomodoroFaqs["data"]
+                                                .returnedGetPomodoroFAQs["data"]
                                             [i]["answer"],
                                         isExpanded: value
-                                            .returnedGetPomodoroFaqsIsExpanded[i],
+                                            .returnedGetPomodoroFAQsIsExpanded[i],
                                       ),
                                     MediumGap(),
                                     Center(
@@ -197,63 +216,55 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SectionGap(),
-            // ContainerParent(
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Consumer<TargetController>(
-            //           builder: (context, value, child) => value
-            //                       .returnedGetTargets["data"] !=
-            //                   null
-            //               ? Column(
-            //                   crossAxisAlignment: CrossAxisAlignment.start,
-            //                   children: [
-            //                     SimpleText(
-            //                       text: "Your today's target",
-            //                       size: 16,
-            //                       color: Colors.black87,
-            //                       weight: FontWeight.bold,
-            //                     ),
-            //                     ParentGap(),
-            //                     for (int i = 0;
-            //                         i < value.returnedGetTargetsLength;
-            //                         i++)
-            //                       TargetCard(
-            //                         title: value.returnedGetTargets["data"][i]
-            //                             ["title"],
-            //                         dateTimeFrom:
-            //                             value.returnedGetTargets["data"][i]
-            //                                 ["dateTimeFrom"],
-            //                         dateTimeTo: value.returnedGetTargets["data"]
-            //                             [i]["dateTimeTo"],
-            //                       ),
-            //                     SizedBox(
-            //                       width: ScreenSize().width,
-            //                       child: TextButton(
-            //                         onPressed: () {},
-            //                         child: Row(
-            //                           mainAxisAlignment: MainAxisAlignment.end,
-            //                           children: [
-            //                             SimpleText(
-            //                               text: "See All",
-            //                               color: ColorChoice().brownPrimary(),
-            //                               weight: FontWeight.bold,
-            //                             ),
-            //                             Icon(
-            //                               Icons.navigate_next_rounded,
-            //                               color: ColorChoice().brownPrimary(),
-            //                             ),
-            //                           ],
-            //                         ),
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 )
-            //               : const SkeletonTodaysTarget()),
-            //     ],
-            //   ),
-            // ),
-            // SectionGap(),
+            ContainerParent(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Consumer<TargetController>(
+                      builder: (context, value, child) => value
+                                  .returnedGetTargets["data"] !=
+                              null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SimpleText(
+                                  text: "Your today's target",
+                                  size: 16,
+                                  color: Colors.black87,
+                                  weight: FontWeight.bold,
+                                ),
+                                ParentGap(),
+                                targets(value.returnedGetTargetsLength),
+                                SizedBox(
+                                  width: ScreenSize().width,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed(TargetHomePage.routeName);
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SimpleText(
+                                          text: "See All",
+                                          color: ColorChoice().brownPrimary(),
+                                          weight: FontWeight.bold,
+                                        ),
+                                        Icon(
+                                          Icons.navigate_next_rounded,
+                                          color: ColorChoice().brownPrimary(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SkeletonTodaysTarget()),
+                ],
+              ),
+            ),
+            SectionGap(),
             ContainerParent(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.center,
                     child: Consumer<HomeController>(
                       builder: (context, value, child) =>
-                          value.returnedGetPomodoroFaqs["data"] != null
+                          value.returnedGetOthersFAQs["data"] != null
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -277,17 +288,17 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     MediumGap(),
                                     for (int i = 0;
-                                        i < value.returnedGetOtherFaqsLength;
+                                        i < value.returnedGetOthersFAQsLength;
                                         i++)
                                       TemplateDropDown(
                                         question:
-                                            value.returnedGetOtherFaqs["data"]
+                                            value.returnedGetOthersFAQs["data"]
                                                 [i]["question"],
                                         answer:
-                                            value.returnedGetOtherFaqs["data"]
+                                            value.returnedGetOthersFAQs["data"]
                                                 [i]["answer"],
                                         isExpanded: value
-                                            .returnedGetOtherFaqsIsExpanded[i],
+                                            .returnedGetOthersFAQsIsExpanded[i],
                                       ),
                                   ],
                                 )
@@ -301,6 +312,61 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget targets(int length) {
+    final targetProvider =
+        Provider.of<TargetController>(context, listen: false);
+
+    if (length == 0) {
+      return Consumer<TargetController>(
+        builder: (context, value, child) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SimpleText(
+                text:
+                    "Oops, looks like you haven’t add any target today. Let’s add at least one."),
+            MediumGap(),
+            const AddTargetCard(),
+          ],
+        ),
+      );
+    } else if (length >= 3) {
+      return Consumer<TargetController>(
+        builder: (context, value, child) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < 3; i++)
+              TargetCard(
+                id: value.returnedGetTargets["data"][i]["id"],
+                title: value.returnedGetTargets["data"][i]["title"],
+                date: value.returnedGetTargets["data"][i]["dateChosen"],
+                timeFrom: value.returnedGetTargets["data"][i]["timeFrom"],
+                timeTo: value.returnedGetTargets["data"][i]["timeTo"],
+                description: value.returnedGetTargets["data"][i]["description"],
+              ),
+          ],
+        ),
+      );
+    } else {
+      return Consumer<TargetController>(
+        builder: (context, value, child) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < value.returnedGetTargetsLength; i++)
+              TargetCard(
+                id: value.returnedGetTargets["data"][i]["id"],
+                title: value.returnedGetTargets["data"][i]["title"],
+                date: value.returnedGetTargets["data"][i]["dateChosen"],
+                timeFrom: value.returnedGetTargets["data"][i]["timeFrom"],
+                timeTo: value.returnedGetTargets["data"][i]["timeTo"],
+                description: value.returnedGetTargets["data"][i]["description"],
+              ),
+            const AddTargetCard(),
+          ],
+        ),
+      );
+    }
   }
 }
 
@@ -476,19 +542,26 @@ class SkeletonOtherFaqs extends StatelessWidget {
 }
 
 class TargetCard extends StatelessWidget {
-  final String title, dateTimeFrom, dateTimeTo;
+  final int id;
+  final String title, date, timeFrom, timeTo, description;
 
   const TargetCard({
     super.key,
+    required this.id,
     required this.title,
-    required this.dateTimeFrom,
-    required this.dateTimeTo,
+    required this.date,
+    required this.timeFrom,
+    required this.timeTo,
+    required this.description,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context)
+            .pushNamed(TargetDetailPage.routeName, arguments: {"id": id});
+      },
       child: ContainerChild(
         child: Column(
           children: [
@@ -511,12 +584,34 @@ class TargetCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SimpleText(
-                        text:
-                            "${DateFormat('EEEE, d MMM y').format(DateTime.parse(dateTimeFrom))}",
-                      ),
+                          text: DateFormat('d MMMM y')
+                              .format(DateTime.parse(date))),
                       SimpleText(
-                        text:
-                            "${DateFormat('Hm').format(DateTime.parse(dateTimeFrom))} - ${DateFormat('Hm').format(DateTime.parse(dateTimeTo))}",
+                        text: "$timeFrom - $timeTo",
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SmallGap(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.notes_rounded,
+                  color: ColorChoice().brownPrimary(),
+                ),
+                Expanded(
+                  child: Wrap(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: ScreenSize().width / 50),
+                        child: SimpleText(
+                          text: description,
+                          overflow: true,
+                          maxLines: true,
+                        ),
                       ),
                     ],
                   ),
@@ -529,6 +624,113 @@ class TargetCard extends StatelessWidget {
     );
   }
 }
+
+class AddTargetCard extends StatelessWidget {
+  const AddTargetCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        // targetProvider.getTargetDetail(id);
+        Navigator.of(context).pushNamed(TargetCreatePage.routeName);
+      },
+      child: ContainerChild(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Icon(
+            //   Icons.add,
+            //   color: ColorChoice().white(),
+            // ),
+            Container(
+              height: ScreenSize().width / 8,
+              width: ScreenSize().width / 8,
+              margin: EdgeInsets.only(
+                top: ScreenSize().width / 30,
+                bottom: ScreenSize().width / 30,
+              ),
+              decoration: BoxDecoration(
+                color: ColorChoice().brownPrimary(),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+            MediumHorizontalGap(),
+            MediumHorizontalGap(),
+            SimpleText(
+              text: "Click to add target",
+              size: FontSize().adjustFont(16),
+              color: ColorChoice().brownPrimary(),
+              weight: FontWeight.bold,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// class TargetCard extends StatelessWidget {
+//   final String title, timeFrom, dateTimeTo;
+
+//   const TargetCard({
+//     super.key,
+//     required this.title,
+//     required this.dateTimeFrom,
+//     required this.dateTimeTo,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextButton(
+//       onPressed: () {},
+//       child: ContainerChild(
+//         child: Column(
+//           children: [
+//             SimpleText(
+//               text: title,
+//               size: 16,
+//               weight: FontWeight.bold,
+//             ),
+//             ParentGap(),
+//             Row(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Icon(
+//                   Icons.access_time_rounded,
+//                   color: ColorChoice().brownPrimary(),
+//                 ),
+//                 Padding(
+//                   padding: EdgeInsets.only(left: ScreenSize().width / 50),
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       SimpleText(
+//                         text:
+//                             "${DateFormat('EEEE, d MMM y').format(DateTime.parse(dateTimeFrom))}",
+//                       ),
+//                       SimpleText(
+//                         text:
+//                             "${DateFormat('Hm').format(DateTime.parse(dateTimeFrom))} - ${DateFormat('Hm').format(DateTime.parse(dateTimeTo))}",
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class FeatureButton extends StatelessWidget {
   final Color color;

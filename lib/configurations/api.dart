@@ -15,11 +15,8 @@ class API {
   static const deleteTarget = "target/deleteTarget";
   static const updateTarget = "target/updateTarget";
 
-  var test = SharedPrefs(key: 'test').getSharedPrefsValue;
-  // static const headersWithoutAuth = {
-  //   "Content-Type": "application/json",
-  //   "Host": "localhost:44337",
-  // };
+  static const getPomodoroFAQs = "faq/getPomodoroFAQs";
+  static const getOthersFAQs = "faq/getOthersFAQs";
 
   Map<String, String> headersWithoutAuth = {
     "Content-Type": "application/json",

@@ -8,6 +8,7 @@ import 'package:project_pomodoro/resources/color_choice_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
 
 import '../../../utilities/shared_prefs_utility.dart';
+import '../../home/views/home_page.dart';
 
 class SplashPage extends StatefulWidget {
   static const routeName = '/splash';
@@ -23,8 +24,8 @@ class _SplashPageState extends State<SplashPage> {
       if (previousToken == "") {
         Navigator.of(context).pushReplacementNamed(SignInPage.routeName);
       } else {
-        Navigator.of(context).pushReplacementNamed(SignInPage.routeName);
-        // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        // Navigator.of(context).pushReplacementNamed(SignInPage.routeName);
+        Navigator.of(context).pushReplacementNamed(HomePage.routeName);
       }
     });
   }

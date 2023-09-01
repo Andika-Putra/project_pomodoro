@@ -2,92 +2,133 @@
 
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:project_pomodoro/utilities/print_debug_utility.dart';
 
-class HomeController with ChangeNotifier {
-  Map<String, dynamic> _returnedGetPomodoroFaqs = {};
-  Map<String, dynamic> get returnedGetPomodoroFaqs => _returnedGetPomodoroFaqs;
-  int get returnedGetPomodoroFaqsLength =>
-      _returnedGetPomodoroFaqs["data"].length;
-  List<bool> _returnedGetPomodoroFaqsIsExpanded = [];
-  List<bool> get returnedGetPomodoroFaqsIsExpanded =>
-      _returnedGetPomodoroFaqsIsExpanded;
+import '../../../configurations/api.dart';
 
-  Future<void> getPomodoroFaqs() async {
-    PrintDebug().printGetPomodoroFaqs("Start of function getPomodoroFaqs");
+class HomeController with ChangeNotifier {
+  Map<String, dynamic> _returnedGetPomodoroFAQs = {};
+  Map<String, dynamic> get returnedGetPomodoroFAQs => _returnedGetPomodoroFAQs;
+  int get returnedGetPomodoroFAQsLength =>
+      _returnedGetPomodoroFAQs["data"].length;
+  List<bool> _returnedGetPomodoroFAQsIsExpanded = [];
+  List<bool> get returnedGetPomodoroFAQsIsExpanded =>
+      _returnedGetPomodoroFAQsIsExpanded;
+
+  Future<void> getPomodoroFAQs() async {
+    PrintDebug().printGetPomodoroFAQs("Start of function getPomodoroFAQs");
 
     try {
-      _returnedGetPomodoroFaqs = {};
-      _returnedGetPomodoroFaqsIsExpanded = [];
+      _returnedGetPomodoroFAQs = {};
+      _returnedGetPomodoroFAQsIsExpanded = [];
+      PrintDebug()
+          .printGetPomodoroFAQs("URI: ${API().baseUri(API.getPomodoroFAQs)}");
+
+      var requestBody = {};
+
+      PrintDebug().printGetPomodoroFAQs("Headers: ${API().headersWithAuth}");
+      PrintDebug()
+          .printGetPomodoroFAQs("Encoded Body: ${json.encode(requestBody)}");
+
       await Future.delayed(
         const Duration(seconds: 2),
-        () {
-          var jsonStringData = ''' 
-          {
-            "data": [
-              {"question":"What is Pomodoro Technique?", "answer":"Pomodoro Technique is a time management method based on 25 minutes of focused target followed with 5 minutes of break", "isExpanded":0},
-              {"question":"Why using Pomodoro Technique?", "answer":"Pomodoro Technique focuses on breaking down large tasks into smaller, more manageable ones. Ultimately, it allows you to focus better and spread out your productivity levels throughout the day", "isExpanded":0}
-            ]
-          }
-          ''';
+        () async {
+          http.Response response = await http.post(
+            API().baseUri(API.getPomodoroFAQs),
+            headers: API().headersWithAuth,
+            // body: json.encode(requestBody),
+          );
 
-          _returnedGetPomodoroFaqs = jsonDecode(jsonStringData);
-          for (int i = 0; i < _returnedGetPomodoroFaqs["data"].length; i++) {
-            _returnedGetPomodoroFaqsIsExpanded.add(false);
+          if (response.statusCode == 200) {
+            var responseData = json.decode(response.body);
+            if (responseData["status"] == "0") {
+              PrintDebug().printGetPomodoroFAQs(
+                  "getPomodoroFAQs data is failed to retrieve! Data status code ${responseData["status"]}");
+            } else {
+              _returnedGetPomodoroFAQs = responseData;
+              for (int i = 0;
+                  i < _returnedGetPomodoroFAQs["data"].length;
+                  i++) {
+                _returnedGetPomodoroFAQsIsExpanded.add(false);
+              }
+
+              PrintDebug().printGetPomodoroFAQs("Response Data: $responseData");
+              PrintDebug().printGetPomodoroFAQs(
+                  "getPomodoroFAQs data is successfully retrieved! Data status code ${responseData["status"]}");
+              notifyListeners();
+            }
+          } else {
+            PrintDebug().printGetPomodoroFAQs(
+                "getPomodoroFAQs data is failed to retrieve! Data status code ${response.statusCode}");
           }
-          PrintDebug().printGetPomodoroFaqs(_returnedGetPomodoroFaqs["data"]);
-          PrintDebug().printGetPomodoroFaqs(_returnedGetPomodoroFaqsIsExpanded);
         },
       );
-
-      notifyListeners();
     } catch (e) {
-      PrintDebug().printGetPomodoroFaqs(e);
+      PrintDebug().printGetPomodoroFAQs(e);
     } finally {
-      PrintDebug().printGetPomodoroFaqs("End of function getPomodoroFaqs");
+      PrintDebug().printGetPomodoroFAQs("End of function getPomodoroFAQs");
     }
   }
 
-  Map<String, dynamic> _returnedGetOtherFaqs = {};
-  Map<String, dynamic> get returnedGetOtherFaqs => _returnedGetOtherFaqs;
-  int get returnedGetOtherFaqsLength => _returnedGetPomodoroFaqs["data"].length;
-  List<bool> _returnedGetOtherFaqsIsExpanded = [];
-  List<bool> get returnedGetOtherFaqsIsExpanded =>
-      _returnedGetPomodoroFaqsIsExpanded;
+  Map<String, dynamic> _returnedGetOthersFAQs = {};
+  Map<String, dynamic> get returnedGetOthersFAQs => _returnedGetOthersFAQs;
+  int get returnedGetOthersFAQsLength => _returnedGetOthersFAQs["data"].length;
+  List<bool> _returnedGetOthersFAQsIsExpanded = [];
+  List<bool> get returnedGetOthersFAQsIsExpanded =>
+      _returnedGetOthersFAQsIsExpanded;
 
-  Future<void> getOtherFaqs() async {
-    PrintDebug().printGetPomodoroFaqs("Start of function getOtherFaqs");
+  Future<void> getOthersFAQs() async {
+    PrintDebug().printGetOthersFAQs("Start of function getOthersFAQs");
 
     try {
-      _returnedGetOtherFaqs = {};
-      _returnedGetOtherFaqsIsExpanded = [];
+      _returnedGetOthersFAQs = {};
+      _returnedGetOthersFAQsIsExpanded = [];
+      PrintDebug()
+          .printGetOthersFAQs("URI: ${API().baseUri(API.getOthersFAQs)}");
+
+      var requestBody = {};
+
+      PrintDebug().printGetOthersFAQs("Headers: ${API().headersWithAuth}");
+      PrintDebug()
+          .printGetOthersFAQs("Encoded Body: ${json.encode(requestBody)}");
+
       await Future.delayed(
         const Duration(seconds: 2),
-        () {
-          var jsonStringData = ''' 
-          {
-            "data": [
-              {"question":"Who created this application?", "answer":"This application is created by Andika Putra, a Developer whom had graduated (3.5 years) from Bina Nusantara University, majoring Computer Science, specializing Software Engineering with GPA 3.28 out of 4.00. He had done making application with Android Studio (Java) and is currently pursuing his dream by learning Flutter (Dart) in order to create another amazing apps!", "isExpanded":0},
-              {"question":"Why the developer wanted to create this application?", "answer":"He wanted to help people (mainly student) who doesn’t have a good time management so that they could do their task little by little until its task done", "isExpanded":0}
-            ]
-          }
-          ''';
+        () async {
+          http.Response response = await http.post(
+            API().baseUri(API.getOthersFAQs),
+            headers: API().headersWithAuth,
+            // body: json.encode(requestBody),
+          );
 
-          _returnedGetOtherFaqs = jsonDecode(jsonStringData);
-          for (int i = 0; i < _returnedGetOtherFaqs["data"].length; i++) {
-            _returnedGetPomodoroFaqsIsExpanded.add(false);
+          if (response.statusCode == 200) {
+            var responseData = json.decode(response.body);
+            if (responseData["status"] == "0") {
+              PrintDebug().printGetOthersFAQs(
+                  "getOthersFAQs data is failed to retrieve! Data status code ${responseData["status"]}");
+            } else {
+              _returnedGetOthersFAQs = responseData;
+              for (int i = 0; i < _returnedGetOthersFAQs["data"].length; i++) {
+                _returnedGetOthersFAQsIsExpanded.add(false);
+              }
+
+              PrintDebug().printGetOthersFAQs("Response Data: $responseData");
+              PrintDebug().printGetOthersFAQs(
+                  "getOthersFAQs data is successfully retrieved! Data status code ${responseData["status"]}");
+              notifyListeners();
+            }
+          } else {
+            PrintDebug().printGetOthersFAQs(
+                "getPomodoroFAQs data is failed to retrieve! Response status code ${response.statusCode}");
           }
-          PrintDebug().printGetPomodoroFaqs(_returnedGetOtherFaqs["data"]);
-          PrintDebug().printGetPomodoroFaqs(_returnedGetOtherFaqsIsExpanded);
         },
       );
-
-      notifyListeners();
     } catch (e) {
-      PrintDebug().printGetPomodoroFaqs(e);
+      PrintDebug().printGetOthersFAQs(e);
     } finally {
-      PrintDebug().printGetPomodoroFaqs("End of function getPomodoroFaqs");
+      PrintDebug().printGetOthersFAQs("End of function getOthersFAQs");
     }
   }
 }

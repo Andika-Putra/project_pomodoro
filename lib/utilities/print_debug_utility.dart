@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 class PrintDebug {
-  String functionName = "addPerson";
+  String functionName = "getTargets";
 
   void printGetPomodoroFaqs(message) {
     if (functionName == "getPomodoroFaqs") {
@@ -53,6 +53,18 @@ class PrintDebug {
 
   void printAddPerson(message) {
     if (functionName == "addPerson") {
+      print(message);
+    }
+  }
+
+  void printGetPomodoroFAQs(message) {
+    if (functionName == "getPomodoroFAQs") {
+      print(message);
+    }
+  }
+
+  void printGetOthersFAQs(message) {
+    if (functionName == "printGetOthersFAQs") {
       print(message);
     }
   }
