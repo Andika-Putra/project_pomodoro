@@ -57,6 +57,18 @@ class PrintDebug {
     }
   }
 
+  void printUpdatePerson(message) {
+    if (functionName == "updatePerson") {
+      print(message);
+    }
+  }
+
+  void printGetPersonDetail(message) {
+    if (functionName == "getPersonDetail") {
+      print(message);
+    }
+  }
+
   void printGetPomodoroFAQs(message) {
     if (functionName == "getPomodoroFAQs") {
       print(message);

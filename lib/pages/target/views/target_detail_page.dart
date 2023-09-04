@@ -68,7 +68,6 @@ class _TargetDetailPageState extends State<TargetDetailPage> {
 
     if (getTargetDetailTrigger == true) {
       targetProvider.getTargetDetail(receivedArguments["id"] as int);
-      // setControllerValue();
       getTargetDetailTrigger = !getTargetDetailTrigger;
     }
 

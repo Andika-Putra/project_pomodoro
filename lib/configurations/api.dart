@@ -8,6 +8,8 @@ class API {
 
   static const addPerson = "person/addPerson";
   static const authenticatePerson = "person/authenticatePerson";
+  static const getPersonDetail = "person/getPersonDetail";
+  static const updatePerson = "person/updatePerson";
 
   static const getTargets = "target/getTargets";
   static const getTargetDetail = "target/getTargetDetail";

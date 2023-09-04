@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_pomodoro/pages/account/views/account_home_page.dart';
 import 'package:project_pomodoro/pages/home/controllers/home_controller.dart';
+import 'package:project_pomodoro/pages/pomodoro/views/pomodoro_home_page.dart';
 import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
-// import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
 import 'package:project_pomodoro/pages/target/views/target_home_page.dart';
 import 'package:project_pomodoro/resources/appbar_resource.dart';
 import 'package:project_pomodoro/resources/color_choice_resource.dart';
@@ -20,7 +21,6 @@ import 'package:provider/provider.dart';
 
 import '../../../resources/screen_size_resource.dart';
 import '../../target/controllers/target_controller.dart';
-import '../../target/views/target_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
@@ -105,7 +105,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  AccountHomePage.routeName,
+                  arguments: {
+                    "id": int.parse(SharedPrefs(key: 'id').getSharedPrefsValue),
+                  },
+                );
+              },
               child: Icon(
                 Icons.person,
                 color: ColorChoice().greenPrimary(),
@@ -194,7 +201,10 @@ class _HomePageState extends State<HomePage> {
                                     MediumGap(),
                                     Center(
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.of(context).pushNamed(
+                                              PomodoroHomePage.routeName);
+                                        },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               ColorChoice().greenSecondary(),
@@ -786,6 +796,7 @@ class FeatureButton extends StatelessWidget {
   Future<void>? validateFeatureNavigation(
       BuildContext context, String featureName) {
     if (featureName == "Pomodoro") {
+      return Navigator.of(context).pushNamed(PomodoroHomePage.routeName);
     } else if (featureName == "Target") {
       return Navigator.of(context).pushNamed(TargetHomePage.routeName);
     }

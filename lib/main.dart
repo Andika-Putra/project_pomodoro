@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:project_pomodoro/pages/account/controllers/account_controller.dart';
+import 'package:project_pomodoro/pages/account/views/account_home_page.dart';
 import 'package:project_pomodoro/pages/account/views/sign_in_page.dart';
 import 'package:project_pomodoro/pages/account/views/sign_up_page.dart';
 import 'package:project_pomodoro/pages/home/controllers/home_controller.dart';
 import 'package:project_pomodoro/pages/home/views/home_page.dart';
+import 'package:project_pomodoro/pages/pomodoro/views/pomodoro_home_page.dart';
 import 'package:project_pomodoro/pages/splash/views/splash_page.dart';
 import 'package:project_pomodoro/pages/target/controllers/target_controller.dart';
 import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
@@ -46,6 +48,8 @@ class MyApp extends StatelessWidget {
           TargetHomePage.routeName: (context) => TargetHomePage(),
           TargetCreatePage.routeName: (context) => TargetCreatePage(),
           TargetDetailPage.routeName: (context) => TargetDetailPage(),
+          AccountHomePage.routeName: (context) => AccountHomePage(),
+          PomodoroHomePage.routeName: (context) => PomodoroHomePage(),
         },
       ),
     );

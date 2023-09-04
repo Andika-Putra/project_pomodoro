@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'package:project_pomodoro/pages/account/models/person.dart';
 import 'package:project_pomodoro/utilities/shared_prefs_utility.dart';
 
 import '../../../configurations/api.dart';
@@ -136,6 +137,109 @@ class AccountController with ChangeNotifier {
       PrintDebug().printAddPerson(e);
     } finally {
       PrintDebug().printAddPerson("End of function addPerson");
+    }
+  }
+
+  Map<String, dynamic> _returnedGetPersonDetail = {};
+  Map<String, dynamic> get returnedGetPersonDetail => _returnedGetPersonDetail;
+
+  Future<void> getPersonDetail(int id) async {
+    PrintDebug().printGetPersonDetail("Start of function getPersonDetail");
+
+    try {
+      _returnedGetPersonDetail = {};
+
+      PrintDebug()
+          .printGetPersonDetail("URI: ${API().baseUri(API.getPersonDetail)}");
+
+      var requestBody = {"id": id};
+
+      PrintDebug().printGetPersonDetail("Headers: ${API().headersWithAuth}");
+      PrintDebug()
+          .printGetPersonDetail("Encoded Body: ${json.encode(requestBody)}");
+
+      await Future.delayed(
+        const Duration(milliseconds: 1200),
+        () async {
+          http.Response response = await http.post(
+            API().baseUri(API.getPersonDetail),
+            headers: API().headersWithAuth,
+            body: json.encode(requestBody),
+          );
+
+          if (response.statusCode == 200) {
+            var responseData = json.decode(response.body);
+            if (responseData["status"] == "0") {
+              PrintDebug().printGetPersonDetail(
+                  "getPersonDetail data is failed to retrieve! Data status code ${responseData["status"]}");
+            } else {
+              _returnedGetPersonDetail = responseData;
+              PrintDebug().printGetPersonDetail("Response Data: $responseData");
+              PrintDebug().printGetPersonDetail(
+                  "getPersonDetail data is successfully retrieved! Data status code ${responseData["status"]}");
+              notifyListeners();
+            }
+          } else {
+            PrintDebug().printGetPersonDetail(
+                "getPersonDetail data is failed to retrieve! Response status code ${response.statusCode}");
+          }
+        },
+      );
+    } catch (e) {
+      PrintDebug().printGetPersonDetail(e);
+    } finally {
+      PrintDebug().printGetPersonDetail("End of function getPersonDetail");
+    }
+  }
+
+  Map<String, dynamic> _returnedUpdatePerson = {};
+  Map<String, dynamic> get returnedUpdatePerson => _returnedUpdatePerson;
+
+  Future<void> updatePerson(Person person) async {
+    PrintDebug().printUpdatePerson("Start of function updatePerson");
+
+    try {
+      _returnedUpdatePerson = {};
+
+      PrintDebug().printUpdatePerson("URI: ${API().baseUri(API.updatePerson)}");
+
+      var requestBody = {
+        "id": int.parse(SharedPrefs(key: 'id').getSharedPrefsValue),
+        "name": person.name,
+        "dream": person.dream,
+      };
+
+      PrintDebug().printUpdatePerson("Headers: ${API().headersWithoutAuth}");
+      PrintDebug()
+          .printUpdatePerson("Encoded Body: ${json.encode(requestBody)}");
+
+      http.Response response = await http.post(
+        API().baseUri(API.updatePerson),
+        headers: API().headersWithAuth,
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        if (responseData["status"] == "0") {
+          PrintDebug().printUpdatePerson(
+              "updatePerson data is failed to retrieve! Data status code ${responseData["status"]}");
+        } else {
+          _returnedUpdatePerson = responseData;
+          PrintDebug().printUpdatePerson("Response Data: $responseData");
+          PrintDebug().printUpdatePerson(
+              "updatePerson data is successfully retrieved! Data status code ${responseData["status"]}");
+
+          notifyListeners();
+        }
+      } else {
+        PrintDebug().printUpdatePerson(
+            "updatePerson data is failed to retrieve! Response status code ${response.statusCode}");
+      }
+    } catch (e) {
+      PrintDebug().printUpdatePerson(e);
+    } finally {
+      PrintDebug().printUpdatePerson("End of function updatePerson");
     }
   }
 }
