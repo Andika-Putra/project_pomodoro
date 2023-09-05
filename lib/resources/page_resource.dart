@@ -28,10 +28,11 @@ class _TemplatePageState extends State<TemplatePage> {
     return RefreshIndicator(
       color: widget.colorRefresh ?? ColorChoice().greenPrimary(),
       child: Scrollbar(
-          thickness: 5,
-          radius: const Radius.circular(10),
-          thumbVisibility: false,
-          child: defineType(widget.defineType)),
+        thickness: 5,
+        radius: const Radius.circular(10),
+        thumbVisibility: false,
+        child: defineType(widget.defineType),
+      ),
       onRefresh: () {
         return Future.delayed(
           const Duration(seconds: 2),

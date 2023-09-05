@@ -33,7 +33,7 @@ class HomeController with ChangeNotifier {
           .printGetPomodoroFAQs("Encoded Body: ${json.encode(requestBody)}");
 
       await Future.delayed(
-        const Duration(seconds: 2),
+        const Duration(milliseconds: 1200),
         () async {
           http.Response response = await http.post(
             API().baseUri(API.getPomodoroFAQs),
@@ -95,7 +95,7 @@ class HomeController with ChangeNotifier {
           .printGetOthersFAQs("Encoded Body: ${json.encode(requestBody)}");
 
       await Future.delayed(
-        const Duration(seconds: 2),
+        const Duration(milliseconds: 1200),
         () async {
           http.Response response = await http.post(
             API().baseUri(API.getOthersFAQs),

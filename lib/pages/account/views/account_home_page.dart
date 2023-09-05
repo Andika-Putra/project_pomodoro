@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:project_pomodoro/pages/account/models/person.dart';
+import 'package:project_pomodoro/pages/account/views/sign_in_page.dart';
 import 'package:project_pomodoro/resources/container_resource.dart';
 import 'package:project_pomodoro/resources/page_resource.dart';
 import 'package:project_pomodoro/resources/screen_size_resource.dart';
@@ -329,7 +330,38 @@ class _AccountHomePageState extends State<AccountHomePage> {
                 ),
               ),
             )
-          : const SizedBox(),
+          : ContainerParent(
+              child: ElevatedButton(
+                onPressed: () {
+                  accountProvider.signOut().then(
+                    (_) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          SignInPage.routeName,
+                          (Route<dynamic> route) => false);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: ColorChoice().brownPrimary(),
+                          content: SimpleText(
+                            text: "Sign out succeed",
+                            color: ColorChoice().white(),
+                            weight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                child: SimpleText(
+                  text: "Sign Out",
+                  size: 16,
+                  weight: FontWeight.bold,
+                  color: ColorChoice().white(),
+                ),
+              ),
+            ),
     );
   }
 }

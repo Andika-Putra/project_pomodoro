@@ -24,4 +24,8 @@ class SharedPrefs {
   void deleteSharedPrefs(String key) {
     _sharedPrefs!.remove(key);
   }
+
+  void clearSharedPrefs() {
+    _sharedPrefs!.clear();
+  }
 }

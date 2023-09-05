@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 class PrintDebug {
-  String functionName = "";
+  String functionName = "authenticatePerson";
 
   void printGetPomodoroFaqs(message) {
     if (functionName == "getPomodoroFaqs") {
@@ -76,7 +76,13 @@ class PrintDebug {
   }
 
   void printGetOthersFAQs(message) {
-    if (functionName == "printGetOthersFAQs") {
+    if (functionName == "getOthersFAQs") {
+      print(message);
+    }
+  }
+
+  void printSignOut(message) {
+    if (functionName == "signOut") {
       print(message);
     }
   }

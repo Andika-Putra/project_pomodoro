@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<TargetController>(context, listen: false);
     if (explorePomodoroTrigger == true) {
       Future.delayed(
-        const Duration(seconds: 2),
+        const Duration(milliseconds: 1200),
         () {
           setState(() {
             explorePomodoroTrigger = false;

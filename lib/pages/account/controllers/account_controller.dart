@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:project_pomodoro/pages/account/models/person.dart';
 import 'package:project_pomodoro/utilities/shared_prefs_utility.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../configurations/api.dart';
 import '../../../utilities/print_debug_utility.dart';
@@ -241,5 +242,11 @@ class AccountController with ChangeNotifier {
     } finally {
       PrintDebug().printUpdatePerson("End of function updatePerson");
     }
+  }
+
+  Future<void> signOut() async {
+    SharedPrefs().clearSharedPrefs();
+
+    PrintDebug().printSignOut("All prefs is successfully removed.");
   }
 }
