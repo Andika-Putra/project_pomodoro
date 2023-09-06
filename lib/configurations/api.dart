@@ -23,13 +23,13 @@ class API {
   Map<String, String> headersWithoutAuth = {
     "Content-Type": "application/json",
     // "Host": "localhost:44337",
-    "Host": "$hostRealta",
+    "Host": "$hostPublic",
   };
 
   Map<String, String> headersWithAuth = {
     "Content-Type": "application/json",
     // "Host": "localhost:44337",
-    "Host": "$hostRealta",
+    "Host": "$hostPublic",
     "Authorization": "${SharedPrefs(key: 'token').getSharedPrefsValue}",
     "CompanyId": "ABCDE",
     "UserId": "${SharedPrefs(key: "email").getSharedPrefsValue}",
@@ -41,6 +41,6 @@ class API {
     // return Uri.parse("http://10.0.2.2:44337/api/v1/$linkName");
     // return Uri.parse("http://172.16.2.51:44337/api/v1/$linkName");
     // return Uri.parse("http://10.17.90.95:44337/api/v1/$linkName");
-    return Uri.parse("http://$hostRealta/PomodoroAPI/api/v1/$linkName");
+    return Uri.parse("http://$hostPublic/PomodoroAPI/api/v1/$linkName");
   }
 }
