@@ -48,6 +48,15 @@ class MediumHorizontalGap extends StatelessWidget {
   }
 }
 
+class LargeHorizontalGap extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: ScreenSize().width / 15,
+    );
+  }
+}
+
 class LineGap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

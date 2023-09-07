@@ -10,12 +10,14 @@ class TemplatePage extends StatefulWidget {
   final Color? colorRefresh;
   final Widget child;
   final Object? arguments;
+  final Color? colorBackground;
 
   const TemplatePage({
     required this.defineType,
     this.colorRefresh,
     required this.child,
     this.arguments,
+    this.colorBackground,
   });
 
   @override
@@ -60,6 +62,7 @@ class _TemplatePageState extends State<TemplatePage> {
       return Container(
         height: ScreenSize().heightBody,
         width: ScreenSize().width,
+        color: widget.colorBackground ?? Colors.transparent,
         child: typeContent(),
       );
     }

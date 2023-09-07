@@ -63,10 +63,9 @@ class ContainerGrandParent extends StatelessWidget {
 //ContainerParent contains shadow on top looking like a parent of children
 class ContainerParent extends StatelessWidget {
   final Widget? child;
+  final Color? color;
 
-  ContainerParent({
-    this.child,
-  });
+  ContainerParent({this.child, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +75,9 @@ class ContainerParent extends StatelessWidget {
       padding: EdgeInsets.all(
         ScreenSize().width / 30,
       ),
-      // decoration: BoxDecoration(
-      //   color: Colors.white,
-      // ),
+      decoration: BoxDecoration(
+        color: color ?? Colors.transparent,
+      ),
       child: child,
     );
   }
