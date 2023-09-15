@@ -14,6 +14,7 @@ import 'package:project_pomodoro/pages/target/controllers/target_controller.dart
 import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
 import 'package:project_pomodoro/pages/target/views/target_detail_page.dart';
 import 'package:project_pomodoro/pages/target/views/target_home_page.dart';
+import 'package:project_pomodoro/pages/testing/views/testing_page.dart';
 import 'package:project_pomodoro/utilities/shared_prefs_utility.dart';
 import 'package:provider/provider.dart';
 
@@ -40,8 +41,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: SplashPage.routeName,
+        initialRoute: TestingPage.routeName,
         routes: {
+          TestingPage.routeName: (context) => TestingPage(),
           SplashPage.routeName: (context) => SplashPage(),
           SignInPage.routeName: (context) => SignInPage(),
           SignUpPage.routeName: (context) => SignUpPage(),
