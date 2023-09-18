@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_image_viewer/easy_image_viewer.dart';
@@ -24,41 +25,122 @@ class TestingPage extends StatefulWidget {
 class _TestingPageState extends State<TestingPage> {
   File? image;
 
+  String? encodedValue;
+  Uint8List? decodedValue;
+
+  TextEditingController? encodedValueController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ContainerDefault(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () async {
-                await ImageProcessing().takePicureCamera().then(
-                  (value) {
-                    setState(() {
-                      image = value;
-                      print(image);
-                    });
-                  },
-                );
-              },
-              child: Icon(
-                Icons.camera_alt,
-                size: FontSize().adjustFont(50),
-              ),
-            ),
-            Container(
-              child: TextButton(
-                onPressed: () {},
-                child: photoLocalPreview(
-                  image!,
+      body: TemplatePage(
+        defineType: "",
+        child: ContainerDefault(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  await ImageProcessing().takePicureCamera().then(
+                    (value) {
+                      setState(() {
+                        image = value;
+                        // print(image);
+                      });
+                    },
+                  );
+                },
+                child: Icon(
+                  Icons.camera_alt,
+                  size: FontSize().adjustFont(50),
                 ),
               ),
-            ),
-          ],
+              image != null
+                  ? Column(
+                      children: [
+                        Container(
+                          child: TextButton(
+                            onPressed: () {},
+                            child: photoLocalPreview(
+                              image!,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            getBase64Value(image!);
+                          },
+                          child: Icon(
+                            Icons.upload,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              encodedValue != null
+                  ? SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(ScreenSize().width / 100),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                width: 0.7,
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 5,
+                                  offset: Offset(3, 5),
+                                ),
+                              ],
+                            ),
+                            height: ScreenSize().heightBody / 3,
+                            width: ScreenSize().width / 2,
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Image.memory(decodedValue!),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void getBase64Value(File file) {
+    List<int> imageBytes = File(file.path).readAsBytesSync();
+    setState(() {
+      encodedValue = base64Encode(imageBytes);
+      print("Encoded value : $encodedValue");
+      print("Encoded length : ${encodedValue!.length.toString()}");
+
+      decodedValue = base64Decode(encodedValue!);
+      print("Decoded value : $decodedValue");
+    });
+  }
+
+  void myLongPrint(input) {
+    String str = input.toString();
+
+    // print out each chunk of 1000 characters sequentially
+    while (str.length > 1000) {
+      debugPrint(str.substring(0, 1000));
+
+      // remove the first 1000 characters
+      str = str.substring(1000);
+    }
+
+    // print the remaining characters
+    debugPrint(str);
   }
 
   Widget photoLocalPreview(File path) {
@@ -72,7 +154,7 @@ class _TestingPageState extends State<TestingPage> {
             color: Colors.grey,
           ),
           borderRadius: BorderRadius.circular(5),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.grey,
               blurRadius: 5,
@@ -80,8 +162,8 @@ class _TestingPageState extends State<TestingPage> {
             ),
           ],
         ),
-        height: ScreenSize().heightBody / 2,
-        width: ScreenSize().width / 1.3,
+        height: ScreenSize().heightBody / 3,
+        width: ScreenSize().width / 2,
         child: TextButton(
           onPressed: () {
             showImageViewer(
