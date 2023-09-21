@@ -20,16 +20,19 @@ class API {
   static const getPomodoroFAQs = "faq/getPomodoroFAQs";
   static const getOthersFAQs = "faq/getOthersFAQs";
 
+  static const createPhotoTesting = "testing/createPhoto";
+  static const readPhotoTesting = "testing/readPhoto";
+
   Map<String, String> headersWithoutAuth = {
     "Content-Type": "application/json",
-    // "Host": "localhost:44337",
-    "Host": "$hostRealta",
+    "Host": "localhost:44337",
+    // "Host": "$hostRealta",
   };
 
   Map<String, String> headersWithAuth = {
     "Content-Type": "application/json",
-    // "Host": "localhost:44337",
-    "Host": "$hostRealta",
+    "Host": "localhost:44337",
+    // "Host": "$hostRealta",
     "Authorization": "${SharedPrefs(key: 'token').getSharedPrefsValue}",
     "CompanyId": "ABCDE",
     "UserId": "${SharedPrefs(key: "email").getSharedPrefsValue}",
@@ -38,9 +41,7 @@ class API {
 
   Uri baseUri(String linkName) {
     // return Uri.parse("https://projectpomodoro-default-rtdb.asia-southeast1.firebasedatabase.app/$linkName.json");
-    // return Uri.parse("http://10.0.2.2:44337/api/v1/$linkName");
-    // return Uri.parse("http://172.16.2.51:44337/api/v1/$linkName");
-    // return Uri.parse("http://10.17.90.95:44337/api/v1/$linkName");
-    return Uri.parse("http://$hostRealta/PomodoroAPI/api/v1/$linkName");
+    return Uri.parse("http://10.0.2.2:44337/api/v1/$linkName");
+    // return Uri.parse("http://$hostRealta/PomodoroAPI/api/v1/$linkName");
   }
 }

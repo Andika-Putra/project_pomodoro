@@ -14,6 +14,7 @@ import 'package:project_pomodoro/pages/target/controllers/target_controller.dart
 import 'package:project_pomodoro/pages/target/views/target_create_page.dart';
 import 'package:project_pomodoro/pages/target/views/target_detail_page.dart';
 import 'package:project_pomodoro/pages/target/views/target_home_page.dart';
+import 'package:project_pomodoro/pages/testing/controllers/testing_controller.dart';
 import 'package:project_pomodoro/pages/testing/views/testing_page.dart';
 import 'package:project_pomodoro/utilities/shared_prefs_utility.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => TargetController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TestingController(),
         ),
       ],
       child: MaterialApp(

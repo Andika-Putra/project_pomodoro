@@ -7,9 +7,9 @@ class ImageProcessing {
     // print("Start camera");
     final XFile? imagePicked = await ImagePicker().pickImage(
       source: ImageSource.camera,
-      imageQuality: 30,
-      maxHeight: 500,
-      maxWidth: 500,
+      // imageQuality: 1,
+      // maxHeight: 100,
+      // maxWidth: 100,
     );
     return File(imagePicked!.path);
   }
